@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Lykke.Service.ClientDialogs.AzureRepositories</AssemblyName>
+    <RootNamespace>Lykke.Service.ClientDialogs.AzureRepositories</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Lykke.AzureStorage" Version="8.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lykke.Service.ClientDialogs.Core\Lykke.Service.ClientDialogs.Core.csproj" />
+  </ItemGroup>
+</Project>

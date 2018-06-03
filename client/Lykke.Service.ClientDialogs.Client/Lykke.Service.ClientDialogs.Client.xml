@@ -1,0 +1,896 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Lykke.Service.ClientDialogs.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Lykke.Service.ClientDialogs.Client.ClientDialogsApiException">
+            <summary>
+            ClientDialogs validation api exception
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.ClientDialogsClient">
+            <inheritdoc cref="T:Lykke.Service.ClientDialogs.Client.IClientDialogsClient"/>>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.#ctor(System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.Dispose(System.Boolean)">
+            <summary>
+            Dispose
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.Dispose">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.AddDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.GetDialogAsync(System.String,System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.GetDialogsAsync(System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.GetCommonDialogsAsync">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.DeleteDialogAsync(System.String,System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.SubmitDialogAsync(System.String,System.String,System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.GetSubmittedDialogsAsync(System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.ClientDialogsClient.IsDialogSubmittedAsync(System.String,System.String,System.String)">
+            <inheritdoc />>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.IClientDialogsClient">
+            <summary>
+            Client for dialogs management (client or common dialogs)
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.AddDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel)">
+            <summary>
+            Adds client dialog or common dialog (if clientId = null)
+            </summary>
+            <param name="clientDialog"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.GetDialogAsync(System.String,System.String)">
+            <summary>
+            Gets dialog by id
+            </summary>
+            <param name="clientId"></param>
+            <param name="dialogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.GetDialogsAsync(System.String)">
+            <summary>
+            Gets all client dialogs (including common dialogs)
+            </summary>
+            <param name="clientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.GetCommonDialogsAsync">
+            <summary>
+            Gets all common dialogs
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.DeleteDialogAsync(System.String,System.String)">
+            <summary>
+            Deletes dialog
+            </summary>
+            <param name="clientId"></param>
+            <param name="dialogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.SubmitDialogAsync(System.String,System.String,System.String)">
+            <summary>
+            Submits client dialog
+            </summary>
+            <param name="clientId"></param>
+            <param name="dialogId"></param>
+            <param name="actionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.GetSubmittedDialogsAsync(System.String)">
+            <summary>
+            Gets information about submitted client dialogs
+            </summary>
+            <param name="clientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.IsDialogSubmittedAsync(System.String,System.String,System.String)">
+            <summary>
+            Checks if the cliend dialog already submitted
+            </summary>
+            <param name="clientId"></param>
+            <param name="dialogId"></param>
+            <param name="actionId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.BaseUri">
+            <summary>
+            The base URI of the service.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.SerializationSettings">
+            <summary>
+            Gets or sets json serialization settings.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.DeserializationSettings">
+            <summary>
+            Gets or sets json deserialization settings.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.#ctor(System.Net.Http.DelegatingHandler[])">
+            <summary>
+            Initializes a new instance of the ClientDialogsAPI class.
+            </summary>
+            <param name='handlers'>
+            Optional. The delegating handlers to add to the http client pipeline.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.#ctor(System.Net.Http.HttpClientHandler,System.Net.Http.DelegatingHandler[])">
+            <summary>
+            Initializes a new instance of the ClientDialogsAPI class.
+            </summary>
+            <param name='rootHandler'>
+            Optional. The http client handler used to handle http transport.
+            </param>
+            <param name='handlers'>
+            Optional. The delegating handlers to add to the http client pipeline.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.#ctor(System.Uri,System.Net.Http.DelegatingHandler[])">
+            <summary>
+            Initializes a new instance of the ClientDialogsAPI class.
+            </summary>
+            <param name='baseUri'>
+            Optional. The base URI of the service.
+            </param>
+            <param name='handlers'>
+            Optional. The delegating handlers to add to the http client pipeline.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when a required parameter is null
+            </exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.#ctor(System.Uri,System.Net.Http.HttpClientHandler,System.Net.Http.DelegatingHandler[])">
+            <summary>
+            Initializes a new instance of the ClientDialogsAPI class.
+            </summary>
+            <param name='baseUri'>
+            Optional. The base URI of the service.
+            </param>
+            <param name='rootHandler'>
+            Optional. The http client handler used to handle http transport.
+            </param>
+            <param name='handlers'>
+            Optional. The delegating handlers to add to the http client pipeline.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when a required parameter is null
+            </exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.Initialize">
+            <summary>
+            Initializes client properties.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.GetClientDialogsWithHttpMessagesAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown when a required parameter is null
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when a required parameter is null
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.GetClientDialogWithHttpMessagesAsync(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='dialogId'>
+            </param>
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown when a required parameter is null
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when a required parameter is null
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.GetCommonDialogsWithHttpMessagesAsync(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.GetSubmittedDialogsWithHttpMessagesAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown when a required parameter is null
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown when a required parameter is null
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.AddClientDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='model'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.DeleteClientDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.SubmitDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.IsDialogSubmittedWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.IsAliveWithHttpMessagesAsync(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <summary>
+            Checks service is alive
+            </summary>
+            <param name='customHeaders'>
+            Headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+            <exception cref="T:Microsoft.Rest.HttpOperationException">
+            Thrown when the operation returned an invalid status code
+            </exception>
+            <exception cref="T:Microsoft.Rest.SerializationException">
+            Thrown when unable to deserialize the response
+            </exception>
+            <return>
+            A response object containing the response body and response headers.
+            </return>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPI.#ctor(System.Uri,System.Net.Http.HttpClient)">
+            <inheritdoc />
+            <summary>
+            Should be used to prevent memory leak in RetryPolicy
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions">
+            <summary>
+            Extension methods for ClientDialogsAPI.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetClientDialogs(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='clientId'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetClientDialogsAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='clientId'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetClientDialog(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String,System.String)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='dialogId'>
+            </param>
+            <param name='clientId'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetClientDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String,System.String,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='dialogId'>
+            </param>
+            <param name='clientId'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetCommonDialogs(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetCommonDialogsAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetSubmittedDialogs(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='clientId'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.GetSubmittedDialogsAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.String,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='clientId'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.AddClientDialog(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='model'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.AddClientDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='model'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.DeleteClientDialog(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.DeleteClientDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.SubmitDialog(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.SubmitDialogAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.IsDialogSubmitted(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.IsDialogSubmittedAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Threading.CancellationToken)">
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='request'>
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.IsAlive(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI)">
+            <summary>
+            Checks service is alive
+            </summary>
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.ClientDialogsAPIExtensions.IsAliveAsync(Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI,System.Threading.CancellationToken)">
+            <summary>
+            Checks service is alive
+            </summary>
+            <param name='operations'>
+            The operations group for this extension method.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.BaseUri">
+            <summary>
+            The base URI of the service.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.SerializationSettings">
+            <summary>
+            Gets or sets json serialization settings.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.DeserializationSettings">
+            <summary>
+            Gets or sets json deserialization settings.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.GetClientDialogsWithHttpMessagesAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.GetClientDialogWithHttpMessagesAsync(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='dialogId'>
+            </param>
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.GetCommonDialogsWithHttpMessagesAsync(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.GetSubmittedDialogsWithHttpMessagesAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='clientId'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.AddClientDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='model'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.DeleteClientDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.SubmitDialogWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.IsDialogSubmittedWithHttpMessagesAsync(Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <param name='request'>
+            </param>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.IClientDialogsAPI.IsAliveWithHttpMessagesAsync(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Threading.CancellationToken)">
+            <summary>
+            Checks service is alive
+            </summary>
+            <param name='customHeaders'>
+            The headers that will be added to request.
+            </param>
+            <param name='cancellationToken'>
+            The cancellation token.
+            </param>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.AutorestClient.Models.ActionType">
+            <summary>
+            Defines values for ActionType.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.#ctor">
+            <summary>
+            Initializes a new instance of the ClientDialogModel class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.#ctor(Lykke.Service.ClientDialogs.AutorestClient.Models.DialogType,System.String,System.String,System.String,System.String,System.Collections.Generic.IList{Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel})">
+            <summary>
+            Initializes a new instance of the ClientDialogModel class.
+            </summary>
+            <param name="type">Possible values include: 'Info', 'Warning',
+            'Question'</param>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Id">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Type">
+            <summary>
+            Gets or sets possible values include: 'Info', 'Warning', 'Question'
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.ClientId">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Header">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Text">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Actions">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.ClientDialogModel.Validate">
+            <summary>
+            Validate the object.
+            </summary>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown if validation fails
+            </exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest.#ctor">
+            <summary>
+            Initializes a new instance of the DeleteDialogRequest class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the DeleteDialogRequest class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest.ClientId">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.DeleteDialogRequest.DialogId">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.#ctor">
+            <summary>
+            Initializes a new instance of the DialogActionModel class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.#ctor(Lykke.Service.ClientDialogs.AutorestClient.Models.ActionType,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the DialogActionModel class.
+            </summary>
+            <param name="type">Possible values include: 'Submit',
+            'Checkbox'</param>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.Id">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.Type">
+            <summary>
+            Gets or sets possible values include: 'Submit', 'Checkbox'
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.Text">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogActionModel.Validate">
+            <summary>
+            Validate the object.
+            </summary>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown if validation fails
+            </exception>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.AutorestClient.Models.DialogType">
+            <summary>
+            Defines values for DialogType.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.ErrorResponse.#ctor">
+            <summary>
+            Initializes a new instance of the ErrorResponse class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.ErrorResponse.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,System.Collections.Generic.IList{System.String}})">
+            <summary>
+            Initializes a new instance of the ErrorResponse class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ErrorResponse.ErrorMessage">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.ErrorResponse.ModelErrors">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.#ctor">
+            <summary>
+            Initializes a new instance of the IsAliveResponse class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.#ctor(System.Boolean,System.String,System.String,System.String,System.Collections.Generic.IList{Lykke.Service.ClientDialogs.AutorestClient.Models.IssueIndicator})">
+            <summary>
+            Initializes a new instance of the IsAliveResponse class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.Name">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.Version">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.Env">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.IsDebug">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.IssueIndicators">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.IsAliveResponse.Validate">
+            <summary>
+            Validate the object.
+            </summary>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown if validation fails
+            </exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.IssueIndicator.#ctor">
+            <summary>
+            Initializes a new instance of the IssueIndicator class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.IssueIndicator.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the IssueIndicator class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IssueIndicator.Type">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.IssueIndicator.Value">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest.#ctor">
+            <summary>
+            Initializes a new instance of the SubmitDialogRequest class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the SubmitDialogRequest class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest.ClientId">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest.DialogId">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmitDialogRequest.ActionId">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogModel.#ctor">
+            <summary>
+            Initializes a new instance of the SubmittedDialogModel class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogModel.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the SubmittedDialogModel class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogModel.DialogId">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogModel.ActionId">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogResult.#ctor">
+            <summary>
+            Initializes a new instance of the SubmittedDialogResult class.
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogResult.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the SubmittedDialogResult class.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogResult.Submitted">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.AutorestClient.Models.SubmittedDialogResult.Validate">
+            <summary>
+            Validate the object.
+            </summary>
+            <exception cref="T:Microsoft.Rest.ValidationException">
+            Thrown if validation fails
+            </exception>
+        </member>
+    </members>
+</doc>

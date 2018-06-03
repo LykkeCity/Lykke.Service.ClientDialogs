@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Lykke.Service.ClientDialogs.Services</AssemblyName>
+    <RootNamespace>Lykke.Service.ClientDialogs.Services</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Lykke.Common" Version="6.8.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lykke.Service.ClientDialogs.Core\Lykke.Service.ClientDialogs.Core.csproj" />
+  </ItemGroup>
+</Project>
