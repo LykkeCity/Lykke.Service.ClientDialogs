@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using AzureStorage.Tables;
 using Common.Log;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
@@ -14,24 +15,26 @@ namespace Lykke.Service.ClientDialogs.Modules
     public class ServiceModule : Module
     {
         private readonly IReloadingManager<AppSettings> _appSettings;
+        private readonly ILog _log;
 
-        public ServiceModule(IReloadingManager<AppSettings> appSettings)
+        public ServiceModule(IReloadingManager<AppSettings> appSettings, ILog log)
         {
             _appSettings = appSettings;
+            _log = log;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(ctx =>
+            builder.RegisterInstance(
                 new ClientDialogsRepository(AzureTableStorage<ClientDialogEntity>.Create(
                     _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "Dialogs",
-                    ctx.Resolve<ILog>()))
+                    _log))
             ).As<IClientDialogsRepository>().SingleInstance();
             
-            builder.Register(ctx =>
+            builder.RegisterInstance(
                 new ClientDialogSubmitsRepository(AzureTableStorage<ClientDialogSubmitEntity>.Create(
                     _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "DialogSubmits",
-                    ctx.Resolve<ILog>()))
+                   _log))
             ).As<IClientDialogSubmitsRepository>().SingleInstance();
 
             builder.RegisterType<ClientDialogsService>()

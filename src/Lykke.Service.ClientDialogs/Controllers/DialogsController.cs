@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -143,6 +144,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
                 return BadRequest(ErrorResponse.Create($"{nameof(request.ActionId)} is invalid"));
 
             var isSubmitted = await _clientDialogsService.IsDialogSubmittedAsync(request.ClientId, request.DialogId, request.ActionId);
+
+            var dialog = await _clientDialogsService.GetDialogAsync(request.ClientId, request.DialogId);
+            
+            if (dialog == null)
+                return BadRequest(ErrorResponse.Create("Dialog not found"));
+            
+            if (dialog.Actions.All(item => item.Id != request.ActionId))
+                return BadRequest(ErrorResponse.Create("Action not found"));
             
             if (isSubmitted)
                 return BadRequest(ErrorResponse.Create("This dialog is already submitted"));
