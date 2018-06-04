@@ -24,7 +24,9 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
         public async Task<IClientDialog> GetDialogAsync(string clientId, string dialogId)
         {
             return await _tableStorage.GetDataAsync(ClientDialogEntity.GeneratePartitionKey(clientId),
-                ClientDialogEntity.GenerateRowKey(dialogId));
+                ClientDialogEntity.GenerateRowKey(dialogId))
+                ?? await _tableStorage.GetDataAsync(ClientDialogEntity.GeneratePartitionKey(null),
+                       ClientDialogEntity.GenerateRowKey(dialogId));
         }
 
         public async Task<IEnumerable<IClientDialog>> GetDialogsAsync(string clientId)

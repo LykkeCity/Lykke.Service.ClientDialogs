@@ -3,9 +3,9 @@ using AutoMapper;
 using Lykke.Sdk;
 using Lykke.Service.ClientDialogs.Profiles;
 using Lykke.Service.ClientDialogs.Settings;
-using Lykke.SettingsReader;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Lykke.Service.ClientDialogs
 {
@@ -19,18 +19,20 @@ namespace Lykke.Service.ClientDialogs
             });
 
             Mapper.AssertConfigurationIsValid();
-            
+
             return services.BuildServiceProvider<AppSettings>(options =>
             {
                 options.ApiTitle = "ClientDialogs API";
-                options.LogsConnectionStringFactory = ctx => ctx.ConnectionString(x => x.ClientDialogsService.Db.LogsConnString);
-                options.LogsTableName = "ClientDialogsLog";
+                options.Logs = ("ClientDialogsLog", ctx => ctx.ClientDialogsService.Db.LogsConnString);
             });
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, ILoggerFactory logger)
         {
             app.UseLykkeConfiguration();
+
+            logger.AddConsole();
+            logger.AddDebug();
         }
     }
 }
