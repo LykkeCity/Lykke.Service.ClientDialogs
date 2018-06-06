@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using AzureStorage.Tables;
 using Common.Log;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
