@@ -11,10 +11,10 @@ namespace Lykke.Service.ClientDialogs.Client
             if (string.IsNullOrWhiteSpace(serviceUrl))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(serviceUrl));
 
-            builder.RegisterType<ClientDialogsClient>()
-                .WithParameter("serviceUrl", serviceUrl)
-                .As<IClientDialogsClient>()
-                .SingleInstance();
+//            builder.RegisterType<ClientDialogsClient>()
+//                .WithParameter("serviceUrl", serviceUrl)
+//                .As<IClientDialogsClient>()
+//                .SingleInstance();
         }
 
         public static void RegisterClientDialogsClient(this ContainerBuilder builder, ClientDialogsServiceClientSettings settings)

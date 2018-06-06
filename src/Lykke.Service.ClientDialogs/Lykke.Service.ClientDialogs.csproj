@@ -23,11 +23,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Lykke.Sdk" Version="1.0.4" />
+    <PackageReference Include="Lykke.Sdk" Version="1.0.5" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\client\Lykke.Service.ClientDialogs.Client\Lykke.Service.ClientDialogs.Client.csproj" />
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.AzureRepositories\Lykke.Service.ClientDialogs.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.Core\Lykke.Service.ClientDialogs.Core.csproj" />
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.Services\Lykke.Service.ClientDialogs.Services.csproj" />
