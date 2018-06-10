@@ -7,12 +7,12 @@
     <RootNamespace>Lykke.Service.ClientDialogs</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.0\Lykke.Service.ClientDialogs.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netcoreapp2.1\Lykke.Service.ClientDialogs.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Lykke.Service.ClientDialogs.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.1\Lykke.Service.ClientDialogs.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -23,7 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Lykke.Sdk" Version="1.0.5" />
+    <PackageReference Include="Lykke.Sdk" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
   </ItemGroup>
@@ -32,6 +32,11 @@
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.AzureRepositories\Lykke.Service.ClientDialogs.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.Core\Lykke.Service.ClientDialogs.Core.csproj" />
     <ProjectReference Include="..\Lykke.Service.ClientDialogs.Services\Lykke.Service.ClientDialogs.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Lykke.Sdk, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\Lykke.Sdk\src\Lykke.Sdk\bin\Debug\netstandard2.0\Lykke.Sdk.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <ItemGroup>

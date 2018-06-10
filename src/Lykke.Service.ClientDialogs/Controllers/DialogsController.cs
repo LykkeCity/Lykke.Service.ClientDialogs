@@ -6,16 +6,18 @@ using AutoMapper;
 using Common;
 using Lykke.Common.Api.Contract.Responses;
 using Lykke.Common.ApiLibrary.Extensions;
+using Lykke.Service.ClientDialogs.Client;
+using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
 using Lykke.Service.ClientDialogs.Core.Services;
-using Lykke.Service.ClientDialogs.Models;
+using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Lykke.Service.ClientDialogs.Controllers
 {
     [Route("api/dialogs")]
-    public class DialogsController : Controller
+    public class DialogsController : Controller, IDialogsApi
     {
         private readonly IClientDialogsService _clientDialogsService;
 
@@ -27,57 +29,62 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{clientId}")]
         [SwaggerOperation("GetClientDialogs")]
-        [ProducesResponseType(typeof(IEnumerable<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetClientDialogs(string clientId)
+        public async Task<IReadOnlyList<ClientDialogModel>> GetClientDialogsAsync(string clientId)
         {
+            if (!clientId.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(clientId)} is invalid");
+            
             var dialogs = await _clientDialogsService.GetDialogsAsync(clientId);
-            var result = Mapper.Map<IEnumerable<ClientDialogModel>>(dialogs);
-            return Ok(result);
+            var result = Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
+            return result;
         }
         
         [HttpGet]
         [Route("/api/dialog/{dialogId}")]
         [SwaggerOperation("GetClientDialog")]
         [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(void), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(void), (int) HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetClientDialog(string dialogId, [FromQuery]string clientId)
+        public async Task<ClientDialogModel> GetClientDialogAsync(string dialogId, [FromQuery]string clientId)
         {
+            if (!dialogId.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(dialogId)} is invalid");
+            
+            if (!string.IsNullOrEmpty(clientId) && !clientId.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(clientId)} is invalid");
+            
             var dialog = await _clientDialogsService.GetDialogAsync(clientId, dialogId);
             var result = Mapper.Map<ClientDialogModel>(dialog);
-
-            if (result == null)
-                return NotFound();
-            
-            return Ok(result);
+            return result;
         }
         
         [HttpGet]
         [Route("common")]
         [SwaggerOperation("GetCommonDialogs")]
-        [ProducesResponseType(typeof(IEnumerable<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetCommonDialogs()
+        public async Task<IReadOnlyList<ClientDialogModel>> GetCommonDialogsAsync()
         {
             var dialogs = await _clientDialogsService.GetCommonDialogsAsync();
-            var result = Mapper.Map<IEnumerable<ClientDialogModel>>(dialogs);
-            return Ok(result);
+            var result = Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
+            return result;
         }
         
         [HttpGet]
         [Route("{clientId}/submitted")]
         [SwaggerOperation("GetSubmittedDialogs")]
-        [ProducesResponseType(typeof(IEnumerable<SubmittedDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<SubmittedDialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetSubmittedDialogs(string clientId)
+        public async Task<IReadOnlyList<SubmittedDialogModel>> GetSubmittedDialogsAsync(string clientId)
         {
             if (!clientId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(clientId)} is invalid"));
+                throw new ValidationApiException($"{nameof(clientId)} is invalid");
             
             var dialogs = await _clientDialogsService.GetSubmittedDialogsAsync(clientId);
-            var result = Mapper.Map<IEnumerable<SubmittedDialogModel>>(dialogs);
-            return Ok(result);
+            var result = Mapper.Map<IReadOnlyList<SubmittedDialogModel>>(dialogs);
+            return result;
         }
         
         [HttpPost]
@@ -85,29 +92,22 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("AddClientDialog")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> AddClientDialog([FromBody] ClientDialogModel model)
+        public async Task AddClientDialogAsync([FromBody] ClientDialogModel model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ErrorResponse.Create(ModelState.GetErrorMessage()));
+                throw new ValidationApiException(ModelState.GetErrorMessage());
 
-            if (!model.Id.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"Invalid {nameof(model.Id)} value"));
-            
-            if (model.Actions.Length == 0)
-                return BadRequest(ErrorResponse.Create("Specify at least one action"));
-            
             foreach (var action in model.Actions)
                 if (!action.Id.IsValidPartitionOrRowKey())
-                    return BadRequest(ErrorResponse.Create($"Action Id = {action.Id} is invalid"));
+                    throw new ValidationApiException($"Action Id = {action.Id} is invalid");
 
             var existingDialog = await _clientDialogsService.GetDialogAsync(model.ClientId, model.Id);
 
             if (existingDialog != null)
-                return BadRequest(ErrorResponse.Create($"Dialog with Id = {model.Id} is already exists"));
+                throw new ValidationApiException($"Dialog with Id = {model.Id} is already exists");
 
             var dialog = Mapper.Map<IClientDialog>(model);
             await _clientDialogsService.AddDialogAsync(dialog);
-            return Ok();
         }
         
         [HttpDelete]
@@ -115,13 +115,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("DeleteClientDialog")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> DeleteClientDialog([FromBody] DeleteDialogRequest request)
+        public async Task DeleteClientDialogAsync([FromBody] DeleteDialogRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ErrorResponse.Create(ModelState.GetErrorMessage()));
+                throw new ValidationApiException(ModelState.GetErrorMessage());
 
             await _clientDialogsService.DeleteDialogAsync(request.ClientId, request.DialogId);
-            return Ok();
         }
         
         [HttpPost]
@@ -129,35 +128,25 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("SubmitDialog")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> SubmitDialog([FromBody] SubmitDialogRequest request)
+        public async Task SubmitDialogAsync([FromBody] SubmitDialogRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ErrorResponse.Create(ModelState.GetErrorMessage()));
+                throw new ValidationApiException(ModelState.GetErrorMessage());
             
-            if (!request.ClientId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.ClientId)} is invalid"));
-            
-            if (!request.DialogId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.DialogId)} is invalid"));
-            
-            if (!request.ActionId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.ActionId)} is invalid"));
-
-            var isSubmitted = await _clientDialogsService.IsDialogSubmittedAsync(request.ClientId, request.DialogId, request.ActionId);
-
             var dialog = await _clientDialogsService.GetDialogAsync(request.ClientId, request.DialogId);
             
             if (dialog == null)
-                return BadRequest(ErrorResponse.Create("Dialog not found"));
+                throw new ValidationApiException("Dialog not found");
             
             if (dialog.Actions.All(item => item.Id != request.ActionId))
-                return BadRequest(ErrorResponse.Create("Action not found"));
+                throw new ValidationApiException("Action not found");
+
+            var isSubmitted = await _clientDialogsService.IsDialogSubmittedAsync(request.ClientId, request.DialogId, request.ActionId);
             
             if (isSubmitted)
-                return BadRequest(ErrorResponse.Create("This dialog is already submitted"));
+                throw new ValidationApiException("This dialog is already submitted");
             
             await _clientDialogsService.SubmitDialogAsync(request.ClientId, request.DialogId, request.ActionId);
-            return Ok();
         }
         
         [HttpPost]
@@ -165,26 +154,15 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("IsDialogSubmitted")]
         [ProducesResponseType(typeof(SubmittedDialogResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IsDialogSubmitted([FromBody] SubmitDialogRequest request)
+        public async Task<SubmittedDialogResult> IsDialogSubmittedAsyc([FromBody] SubmitDialogRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ErrorResponse.Create(ModelState.GetErrorMessage()));
+                throw new ValidationApiException(ModelState.GetErrorMessage());
             
-            if (!request.ClientId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.ClientId)} is invalid"));
-            
-            if (!request.DialogId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.DialogId)} is invalid"));
-            
-            if (!request.ActionId.IsValidPartitionOrRowKey())
-                return BadRequest(ErrorResponse.Create($"{nameof(request.ActionId)} is invalid"));
-
-            var result = new SubmittedDialogResult
+            return new SubmittedDialogResult
             {
                 Submitted = await _clientDialogsService.IsDialogSubmittedAsync(request.ClientId, request.DialogId, request.ActionId)
             };
-            
-            return Ok(result);
         }
     }
 }

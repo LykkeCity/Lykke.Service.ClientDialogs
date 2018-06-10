@@ -1,18 +1,18 @@
 ﻿namespace Lykke.Service.ClientDialogs.Client.Models
 {
     /// <summary>
-    /// Type of the action element
+    /// Submitted dialog info
     /// </summary>
-    public enum ActionType
+    public class SubmittedDialogModel
     {
         /// <summary>
-        /// Button
+        /// Dialog id
         /// </summary>
-        Submit,
+        public string DialogId { get; set; }
         
         /// <summary>
-        /// Checkbox
+        /// Action id
         /// </summary>
-        Checkbox
+        public string ActionId { get; set; }
     }
 }

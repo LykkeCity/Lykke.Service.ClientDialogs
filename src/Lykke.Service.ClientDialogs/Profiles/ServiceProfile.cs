@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
-using Lykke.Service.ClientDialogs.Models;
 
 namespace Lykke.Service.ClientDialogs.Profiles
 {

@@ -2,20 +2,40 @@
 
 namespace Lykke.Service.ClientDialogs.Client.Models
 {
+    /// <summary>
+    /// Client dialog
+    /// </summary>
     public class ClientDialogModel
     {
+        /// <summary>
+        /// Dialog id
+        /// </summary>
         public string Id { get; set; }
+        
+        /// <summary>
+        /// Dialog type
+        /// </summary>
         public DialogType Type { get; set; }
+        
+        /// <summary>
+        /// ClientId for this dialog
+        /// <remarks>null for common dialogs</remarks>
+        /// </summary>
         public string ClientId { get; set; }
+        
+        /// <summary>
+        /// Dialog title
+        /// </summary>
         public string Header { get; set; }
+        
+        /// <summary>
+        /// Dialog text
+        /// </summary>
         public string Text { get; set; }
+        
+        /// <summary>
+        /// List of dialog actions (buttons or checkbox) for submit
+        /// </summary>
         public DialogActionModel[] Actions { get; set; } = Array.Empty<DialogActionModel>();
-    }
-
-    public class DialogActionModel
-    {
-        public string Id { get; set; }
-        public ActionType Type { get; set; }
-        public string Text { get; set; }
     }
 }
