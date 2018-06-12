@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AzureStorage.Tables;
+using AzureStorage.Tables.Templates.Index;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialogSubmit;
 using Lykke.Service.ClientDialogs.Core.Domain;
@@ -17,136 +18,143 @@ namespace Lykke.Service.ClientDialogs.Tests
 
         public ClientDialogsServiceTests()
         {
-            var dialogsRepository = new ClientDialogsRepository(new NoSqlTableInMemory<ClientDialogEntity>());
+            var dialogsRepository = new ClientDialogsRepository(
+                new NoSqlTableInMemory<ClientDialogEntity>(),
+                new NoSqlTableInMemory<AzureIndex>(),
+                new NoSqlTableInMemory<AzureIndex>());
             var submitDialogsRepository = new ClientDialogSubmitsRepository(new NoSqlTableInMemory<ClientDialogSubmitEntity>());
             _service = new ClientDialogsService(dialogsRepository, submitDialogsRepository);
         }
 
         [Fact]
-        public async Task Is_Client_Dialog_Added()
+        public async Task Is_Dialog_Added_And_Deleted()
         {
-            var dialog = CreateDialog("1", ClientId);
+            const string dialogId = "1";
+            
+            await AddDialogAsync(dialogId);
 
-            await _service.AddDialogAsync(dialog);
+            var dialog = await _service.GetDialogAsync(dialogId);
+            var dialogs = (await _service.GetDialogsAsync()).ToArray();
+            
+            Assert.NotNull(dialog);
+            Assert.NotEmpty(dialogs);
+            Assert.Contains(dialogs, x => x.Id == dialogId);
 
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
+            await _service.DeleteDialogAsync(dialogId);
+            
+            dialog = await _service.GetDialogAsync(dialogId);
+            dialogs = (await _service.GetDialogsAsync()).ToArray();
+            
+            Assert.Null(dialog);
+            Assert.Empty(dialogs);
+        }
+        
+        [Fact]
+        public async Task Is_Common_Dialog_Added_And_Removed()
+        {
+            const string dialogId = "1";
+            await AddDialogAsync(dialogId);
+
+            await _service.AssignDialogToAllAsync(dialogId);
+
+            IClientDialog[] commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+
+            Assert.True(commonDialogs.Length == 1);
+            Assert.Contains(commonDialogs, item => item.Id == dialogId);
+
+            await _service.UnAssignCommonDialogAsync(dialogId);
+            
+            commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+
+            Assert.Empty(commonDialogs);
+        }
+        
+        [Fact]
+        public async Task Is_Client_Dialog_Assigned_And_Removed()
+        {
+            const string dialogId = "1";
+            
+            await AddDialogAsync(dialogId);
+
+            await _service.AssignDialogToClientAsync(ClientId, dialogId);
+
+            IClientDialog clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
+            
+            Assert.NotNull(clientDialog);
+            Assert.Equal(dialogId, clientDialog.Id);
+
+            await _service.DeleteDialogAsync(ClientId, dialogId);
+
+            clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
+            
+            Assert.Null(clientDialog);
+        }
+        
+        [Fact]
+        public async Task Is_Client_Dialog_UnAssigned_When_Deleted()
+        {
+            const string dialogId = "1";
+            
+            await AddDialogAsync(dialogId);
+
+            await _service.AssignDialogToClientAsync(ClientId, dialogId);
+            await _service.AssignDialogToAllAsync(dialogId);
+
+            IClientDialog clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
             IClientDialog[] commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
             
-            Assert.True(clientDialogs.Length == 1);
-            Assert.True(commonDialogs.Length == 0);
-            Assert.Equal("1", clientDialogs[0].Id);
-        }
-        
-        [Fact]
-        public async Task Is_Client_Dialog_Removed()
-        {
-            var dialog = CreateDialog("1", ClientId);
-
-            await _service.AddDialogAsync(dialog);
-
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
-            
-            Assert.True(clientDialogs.Length == 1);
-            Assert.Equal("1", clientDialogs[0].Id);
-
-            await _service.DeleteDialogAsync(ClientId, "1");
-            
-            clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
-            
-            Assert.Empty(clientDialogs);
-        }
-        
-        [Fact]
-        public async Task Is_Common_Dialog_Added()
-        {
-            var dialog = CreateDialog("1", null);
-
-            await _service.AddDialogAsync(dialog);
-
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
-            IClientDialog[] commonDialog = (await _service.GetCommonDialogsAsync()).ToArray();
-
-            Assert.True(clientDialogs.Length == 1);
-            Assert.True(commonDialog.Length == 1);
-            Assert.Contains(clientDialogs, item => item.Id == "1");
-            Assert.Contains(commonDialog, item => item.Id == "1");
-        }
-        
-        [Fact]
-        public async Task Is_Common_Dialog_Removed()
-        {
-            var dialog = CreateDialog("1", null);
-
-            await _service.AddDialogAsync(dialog);
-
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
-            IClientDialog[] commonDialog = (await _service.GetCommonDialogsAsync()).ToArray();
-
-            Assert.True(clientDialogs.Length == 1);
-            Assert.True(commonDialog.Length == 1);
-            Assert.Contains(clientDialogs, item => item.Id == "1");
-            Assert.Contains(commonDialog, item => item.Id == "1");
-            
-            await _service.DeleteDialogAsync(null, "1");
-            
-            clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
-            commonDialog = (await _service.GetCommonDialogsAsync()).ToArray();
-
-            Assert.Empty(clientDialogs);
-            Assert.Empty(commonDialog);
-        }
-        
-        [Fact]
-        public async Task Is_Dialog_Returned()
-        {
-            var dialog = CreateDialog("1", ClientId);
-
-            await _service.AddDialogAsync(dialog);
-
-            IClientDialog clientDialog = await _service.GetDialogAsync(ClientId, "1");
-
             Assert.NotNull(clientDialog);
-            Assert.Equal("1", clientDialog.Id);
-            Assert.Equal(ClientId, clientDialog.ClientId);
+            Assert.Equal(dialogId, clientDialog.Id);
+            Assert.NotEmpty(commonDialogs);
+            Assert.Contains(commonDialogs, x => x.Id == dialogId);
+
+            await _service.DeleteDialogAsync(dialogId);
+
+            clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
+            commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+            
+            Assert.Null(clientDialog);
+            Assert.Empty(commonDialogs);
         }
         
         [Fact]
         public async Task Is_Client_Dialog_Submitted_And_Removed_For_Client()
         {
-            var dialog = CreateDialog("1", ClientId);
+            const string dialogId = "1";
+            
+            await AddDialogAsync(dialogId);
 
-            await _service.AddDialogAsync(dialog);
-
-            await _service.SubmitDialogAsync(ClientId, "1", "1");
+            await _service.SubmitDialogAsync(ClientId, dialogId, "1");
 
             var submittedDialogs = await _service.GetSubmittedDialogsAsync(ClientId);
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
+            IClientDialog[] clientDialogs = (await _service.GetClientDialogsAsync(ClientId)).ToArray();
 
-            Assert.Contains(submittedDialogs, item => item.ClientId == ClientId && item.DialogId == "1" && item.ActionId == "1");
+            Assert.Contains(submittedDialogs, item => item.ClientId == ClientId && item.DialogId == dialogId && item.ActionId == "1");
             Assert.Empty(clientDialogs);
         }
         
         [Fact]
         public async Task Is_Common_Dialog_Submitted_And_Removed_For_Client()
         {
-            var dialog = CreateDialog("1", null);
+            const string dialogId = "1";
 
-            await _service.AddDialogAsync(dialog);
+            await AddDialogAsync(dialogId);
+            await _service.AssignDialogToAllAsync(dialogId);
             
-            IClientDialog[] clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
+            IClientDialog[] clientDialogs = (await _service.GetClientDialogsAsync(ClientId)).ToArray();
             
-            Assert.Contains(clientDialogs, item => item.Id == "1");
+            Assert.Contains(clientDialogs, item => item.Id ==dialogId);
 
-            await _service.SubmitDialogAsync(ClientId, "1", "1");
+            await _service.SubmitDialogAsync(ClientId, dialogId, "1");
 
             var submittedDialogs = await _service.GetSubmittedDialogsAsync(ClientId);
-            clientDialogs = (await _service.GetDialogsAsync(ClientId)).ToArray();
+            clientDialogs = (await _service.GetClientDialogsAsync(ClientId)).ToArray();
 
-            Assert.Contains(submittedDialogs, item => item.ClientId == ClientId && item.DialogId == "1" && item.ActionId == "1");
+            Assert.Contains(submittedDialogs, item => item.ClientId == ClientId && item.DialogId == dialogId && item.ActionId == "1");
             Assert.Empty(clientDialogs);
         }
         
-        private IClientDialog CreateDialog(string id, string clientId, DialogType type = DialogType.Info, int actionsCount = 1)
+        private IClientDialog CreateDialog(string id, DialogType type = DialogType.Info, int actionsCount = 1)
         {
             List<DialogAction> actions = new List<DialogAction>();
             
@@ -163,12 +171,17 @@ namespace Lykke.Service.ClientDialogs.Tests
             return new ClientDialog
             {
                 Id = id,
-                ClientId = clientId,
                 Header = "test",
                 Text = "Test dialog",
                 Type = type,
                 Actions = actions.ToArray()
             };
+        }
+
+        private Task AddDialogAsync(string dialogId)
+        {
+            var dialog = CreateDialog(dialogId);
+            return _service.AddDialogAsync(dialog);
         }
     }
 }

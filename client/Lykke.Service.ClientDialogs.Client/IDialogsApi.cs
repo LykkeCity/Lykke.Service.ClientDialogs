@@ -6,57 +6,48 @@ using Refit;
 namespace Lykke.Service.ClientDialogs.Client
 {
     /// <summary>
-    /// Client dialogs service
+    /// Dialogs service
     /// </summary>
     public interface IDialogsApi
     {
         /// <summary>
-        /// Gets client dialogs including common dialogs
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <returns></returns>
-        [Get("/api/dialogs/{clientId}")]
-        Task<IReadOnlyList<ClientDialogModel>> GetClientDialogsAsync(string clientId);
-        
-        /// <summary>
-        /// Gets client dialog
-        /// </summary>
-        /// <param name="dialogId"></param>
-        /// <param name="clientId"></param>
-        /// <returns></returns>
-        [Get("/api/dialog/{dialogId}")]
-        Task<ClientDialogModel> GetClientDialogAsync(string dialogId, string clientId);
-        
-        /// <summary>
-        /// Gets common dialogs
-        /// </summary>
-        /// <returns></returns>
-        [Get("/api/dialogs/common")]
-        Task<IReadOnlyList<ClientDialogModel>> GetCommonDialogsAsync();
-        
-        /// <summary>
-        /// Gets dialogs submitted by client
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <returns></returns>
-        [Get("/api/dialogs/{clientId}/submitted")]
-        Task<IReadOnlyList<SubmittedDialogModel>> GetSubmittedDialogsAsync(string clientId);
-        
-        /// <summary>
-        /// Adds client dialog
+        /// Adds new dialog
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [Post("/api/dialogs")]
-        Task AddClientDialogAsync([Body]ClientDialogModel model);
+        Task<ClientDialogModel> AddDialogAsync([Body]ClientDialogModel model);
         
         /// <summary>
-        /// Deletes client dialog
+        /// Updates new dialog
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [Delete("/api/dialogs")]
-        Task DeleteClientDialogAsync([Body]DeleteDialogRequest request);
+        [Put("/api/dialogs")]
+        Task<ClientDialogModel> UpdateDialogAsync([Body]ClientDialogModel model);
+                
+        /// <summary>
+        /// Gets all dialogs
+        /// </summary>
+        /// <returns></returns>
+        [Get("/api/dialogs")]
+        Task<IReadOnlyList<ClientDialogModel>> GetDialogsAsync();
+        
+        /// <summary>
+        /// Gets dialog by id
+        /// </summary>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
+        [Get("/api/dialogs/{dialogId}")]
+        Task<ClientDialogModel> GetDialogAsync(string dialogId);
+        
+        /// <summary>
+        /// Deletes dialog and assignments (client and common)
+        /// </summary>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
+        [Delete("/api/dialogs/{dialogId}")]
+        Task DeleteDialogAsync(string dialogId);
         
         /// <summary>
         /// Sumbits client dialog
@@ -65,6 +56,14 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <returns></returns>
         [Post("/api/dialogs/submit")]
         Task SubmitDialogAsync([Body]SubmitDialogRequest request);
+        
+        /// <summary>
+        /// Gets dialogs submitted by client
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        [Get("/api/dialogs/{clientId}/submitted")]
+        Task<IReadOnlyList<SubmittedDialogModel>> GetSubmittedDialogsAsync(string clientId);
         
         /// <summary>
         /// Checks if the dialog is already submitted by the client

@@ -19,29 +19,65 @@ namespace Lykke.Service.ClientDialogs.Services
             _dialogsRepository = dialogsRepository;
             _dialogSubmitsRepository = dialogSubmitsRepository;
         }
-        
-        public Task AddDialogAsync(IClientDialog clientDialog)
+
+        public async Task<IClientDialog> AddDialogAsync(IClientDialog clientDialog)
         {
-            return _dialogsRepository.AddDialogAsync(clientDialog);
+            var dialog = await _dialogsRepository.AddDialogAsync(clientDialog);
+
+            if (dialog.IsCommon)
+            {
+                await _dialogsRepository.AssignDialogToAllAsync(dialog.Id);
+            }
+            else
+            {
+                await _dialogsRepository.UnAssignCommonDialogAsync(dialog.Id);
+            }
+
+            return dialog;
         }
 
-        public Task<IClientDialog> GetDialogAsync(string clientId, string dialogId)
+        public async Task<IEnumerable<IClientDialog>> GetDialogsAsync()
         {
-            return _dialogsRepository.GetDialogAsync(clientId, dialogId);
+            return await _dialogsRepository.GetDialogsAsync();
         }
 
-        public async Task<IEnumerable<IClientDialog>> GetDialogsAsync(string clientId)
+        public Task<IClientDialog> GetDialogAsync(string dialogId)
         {
-            var clientDialogs = await _dialogsRepository.GetDialogsAsync(clientId);
+            return _dialogsRepository.GetDialogAsync(dialogId);
+        }
+
+        public Task AssignDialogToAllAsync(string dialogId)
+        {
+            return _dialogsRepository.AssignDialogToAllAsync(dialogId);
+        }
+
+        public Task UnAssignCommonDialogAsync(string dialogId)
+        {
+            return _dialogsRepository.UnAssignCommonDialogAsync(dialogId);
+        }
+
+        public Task DeleteDialogAsync(string dialogId)
+        {
+            return _dialogsRepository.DeleteDialogAsync(dialogId);
+        }
+
+        public async Task<IEnumerable<IClientDialog>> GetClientDialogsAsync(string clientId)
+        {
+            var clientDialogs = await _dialogsRepository.GetClientDialogsAsync(clientId);
             var submittedDialogs = await _dialogSubmitsRepository.GetSubmittedDialogsAsync(clientId);
 
-            //don't return submitted common dialogs
+            //don't return submitted dialogs
             return clientDialogs.Where(item => submittedDialogs.All(i => i.DialogId != item.Id));
         }
 
-        public Task<IEnumerable<IClientDialog>> GetCommonDialogsAsync()
+        public Task<IClientDialog> GetClientDialogAsync(string clientId, string dialogId)
         {
-            return _dialogsRepository.GetCommonDialogsAsync();
+            return _dialogsRepository.GetClientDialogAsync(clientId, dialogId);
+        }
+
+        public Task AssignDialogToClientAsync(string clientId, string dialogId)
+        {
+            return _dialogsRepository.AssignDialogToClientAsync(clientId, dialogId);
         }
 
         public Task DeleteDialogAsync(string clientId, string dialogId)
@@ -63,6 +99,11 @@ namespace Lykke.Service.ClientDialogs.Services
         public Task<bool> IsDialogSubmittedAsync(string clientId, string dialogId, string actionId)
         {
             return _dialogSubmitsRepository.IsDialogSubmittedAsync(clientId, dialogId, actionId);
+        }
+
+        public Task<IEnumerable<IClientDialog>> GetCommonDialogsAsync()
+        {
+            return _dialogsRepository.GetCommonDialogsAsync();
         }
     }
 }

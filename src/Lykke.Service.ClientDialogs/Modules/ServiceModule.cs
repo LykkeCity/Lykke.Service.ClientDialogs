@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AzureStorage.Tables;
+using AzureStorage.Tables.Templates.Index;
 using Common.Log;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialogSubmit;
@@ -26,13 +27,15 @@ namespace Lykke.Service.ClientDialogs.Modules
         {
             builder.RegisterInstance(
                 new ClientDialogsRepository(AzureTableStorage<ClientDialogEntity>.Create(
-                    _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "Dialogs",
-                    _log))
+                    _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "Dialogs", _log),
+                    AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "ClientDialogs", _log),
+                    AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "CommonDialogs", _log)
+                    )
             ).As<IClientDialogsRepository>().SingleInstance();
             
             builder.RegisterInstance(
                 new ClientDialogSubmitsRepository(AzureTableStorage<ClientDialogSubmitEntity>.Create(
-                    _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "DialogSubmits",
+                    _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "SubmittedDialogs",
                    _log))
             ).As<IClientDialogSubmitsRepository>().SingleInstance();
 
