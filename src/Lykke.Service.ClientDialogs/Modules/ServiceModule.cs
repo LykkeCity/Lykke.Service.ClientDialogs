@@ -4,6 +4,7 @@ using AzureStorage.Tables.Templates.Index;
 using Common.Log;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialogSubmit;
+using Lykke.Service.ClientDialogs.AzureRepositories.DialogCondition;
 using Lykke.Service.ClientDialogs.Core.Domain;
 using Lykke.Service.ClientDialogs.Core.Services;
 using Lykke.Service.ClientDialogs.Services;
@@ -38,9 +39,20 @@ namespace Lykke.Service.ClientDialogs.Modules
                     _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "SubmittedDialogs",
                    _log))
             ).As<IClientDialogSubmitsRepository>().SingleInstance();
+            
+            builder.RegisterInstance(
+                new DialogConditionsRepository(AzureTableStorage<DialogConditionEntity>.Create(
+                    _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "DialogConditions", _log),
+                    AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "DialogConditions", _log)
+                    )
+            ).As<IDialogConditionsRepository>().SingleInstance();
 
             builder.RegisterType<ClientDialogsService>()
                 .As<IClientDialogsService>()
+                .SingleInstance();
+            
+            builder.RegisterType<DialogConditionsService>()
+                .As<IDialogConditionsService>()
                 .SingleInstance();
         }
     }

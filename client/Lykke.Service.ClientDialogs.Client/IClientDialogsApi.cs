@@ -39,5 +39,14 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <returns></returns>
         [Delete("/api/clientdialogs")]
         Task DeleteDialogAsync([Body]DeleteDialogRequest request);
+        
+        /// <summary>
+        /// Gets pretrade client dialogs for asset
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        [Get("/api/clientdialogs/{clientId}/{assetId}/pretrade")]
+        Task<IReadOnlyList<ClientDialogModel>> GetPreTradeDialogsAsync(string clientId, string assetId);
     }
 }

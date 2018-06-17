@@ -10,14 +10,17 @@ namespace Lykke.Service.ClientDialogs.Services
     {
         private readonly IClientDialogsRepository _dialogsRepository;
         private readonly IClientDialogSubmitsRepository _dialogSubmitsRepository;
+        private readonly IDialogConditionsRepository _dialogConditionsRepository;
 
         public ClientDialogsService(
             IClientDialogsRepository dialogsRepository,
-            IClientDialogSubmitsRepository dialogSubmitsRepository
+            IClientDialogSubmitsRepository dialogSubmitsRepository,
+            IDialogConditionsRepository dialogConditionsRepository
             )
         {
             _dialogsRepository = dialogsRepository;
             _dialogSubmitsRepository = dialogSubmitsRepository;
+            _dialogConditionsRepository = dialogConditionsRepository;
         }
 
         public async Task<IClientDialog> AddDialogAsync(IClientDialog clientDialog)
@@ -58,7 +61,13 @@ namespace Lykke.Service.ClientDialogs.Services
 
         public Task DeleteDialogAsync(string dialogId)
         {
-            return _dialogsRepository.DeleteDialogAsync(dialogId);
+            var tasks = new List<Task>
+            {
+                _dialogsRepository.DeleteDialogAsync(dialogId),
+                _dialogConditionsRepository.DeleteDialogConditionsAsync(dialogId)
+            };
+            
+            return Task.WhenAll(tasks);
         }
 
         public async Task<IEnumerable<IClientDialog>> GetClientDialogsAsync(string clientId)

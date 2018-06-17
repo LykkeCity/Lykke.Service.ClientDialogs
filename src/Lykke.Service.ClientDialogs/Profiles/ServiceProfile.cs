@@ -12,6 +12,8 @@ namespace Lykke.Service.ClientDialogs.Profiles
             CreateMap<DialogAction, DialogActionModel>(MemberList.Source);
             CreateMap<IClientDialogSubmit, SubmittedDialogModel>(MemberList.Source)
                 .ForSourceMember(s => s.ClientId, o => o.Ignore());
+            CreateMap<Core.Domain.DialogConditionType, Client.Models.DialogConditionType>(MemberList.Source);
+            CreateMap<IDialogCondition, DialogConditionModel>(MemberList.Source);
         }
     }
 }

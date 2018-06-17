@@ -14,5 +14,10 @@ namespace Lykke.Service.ClientDialogs.Client
         /// Api for client dialogs management
         /// </summary>
         IClientDialogsApi ClientDialogs { get; }
+        
+        /// <summary>
+        /// Api for dialog conditions management
+        /// </summary>
+        IDialogConditionsApi DialogConditions { get; }
     }
 }

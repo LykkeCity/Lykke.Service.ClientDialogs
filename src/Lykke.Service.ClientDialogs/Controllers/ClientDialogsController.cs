@@ -19,10 +19,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
     public class ClientDialogsController : Controller, IClientDialogsApi
     {
         private readonly IClientDialogsService _clientDialogsService;
+        private readonly IDialogConditionsService _dialogConditionsService;
 
-        public ClientDialogsController(IClientDialogsService clientDialogsService)
+        public ClientDialogsController(
+            IClientDialogsService clientDialogsService,
+            IDialogConditionsService dialogConditionsService)
         {
             _clientDialogsService = clientDialogsService;
+            _dialogConditionsService = dialogConditionsService;
         }
         
         [HttpGet]
@@ -83,6 +87,20 @@ namespace Lykke.Service.ClientDialogs.Controllers
             throw new ValidationApiException(ModelState.GetErrorMessage());
             
             await _clientDialogsService.DeleteDialogAsync(request.ClientId, request.DialogId);
+        }
+        
+        [HttpGet]
+        [Route("{clientId}/{assetId}/pretrade")]
+        [SwaggerOperation("GetPreTradeDialogs")]
+        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
+        public async Task<IReadOnlyList<ClientDialogModel>> GetPreTradeDialogsAsync(string clientId, string assetId)
+        {
+            if (!clientId.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(clientId)} is invalid");
+
+            var dialogs = await _dialogConditionsService.GetDialogsWithPreTradeConditionAsync(clientId, assetId);
+            return Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
         }
     }
 }

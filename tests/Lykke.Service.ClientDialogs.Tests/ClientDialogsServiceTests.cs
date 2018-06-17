@@ -3,9 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AzureStorage.Tables;
 using AzureStorage.Tables.Templates.Index;
+using Common;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog;
 using Lykke.Service.ClientDialogs.AzureRepositories.ClientDialogSubmit;
+using Lykke.Service.ClientDialogs.AzureRepositories.DialogCondition;
 using Lykke.Service.ClientDialogs.Core.Domain;
+using Lykke.Service.ClientDialogs.Core.Domain.ConditionParameters;
 using Lykke.Service.ClientDialogs.Services;
 using Xunit;
 
@@ -14,6 +17,7 @@ namespace Lykke.Service.ClientDialogs.Tests
     public class ClientDialogsServiceTests
     {
         private readonly ClientDialogsService _service;
+        private readonly DialogConditionsService _conditionsService;
         private const string ClientId = "client1";
 
         public ClientDialogsServiceTests()
@@ -23,7 +27,10 @@ namespace Lykke.Service.ClientDialogs.Tests
                 new NoSqlTableInMemory<AzureIndex>(),
                 new NoSqlTableInMemory<AzureIndex>());
             var submitDialogsRepository = new ClientDialogSubmitsRepository(new NoSqlTableInMemory<ClientDialogSubmitEntity>());
-            _service = new ClientDialogsService(dialogsRepository, submitDialogsRepository);
+            var dialogsConditionRepository = new DialogConditionsRepository(new NoSqlTableInMemory<DialogConditionEntity>(),
+                new NoSqlTableInMemory<AzureIndex>());
+            _service = new ClientDialogsService(dialogsRepository, submitDialogsRepository, dialogsConditionRepository);
+            _conditionsService = new DialogConditionsService(dialogsConditionRepository, _service);
         }
 
         [Fact]
@@ -152,6 +159,35 @@ namespace Lykke.Service.ClientDialogs.Tests
 
             Assert.Contains(submittedDialogs, item => item.ClientId == ClientId && item.DialogId == dialogId && item.ActionId == "1");
             Assert.Empty(clientDialogs);
+        }
+
+        [Fact]
+        public async Task Is_Dialog_Condition_Added_And_Removed()
+        {
+            const string dialogId = "1";
+
+            await AddDialogAsync(dialogId);
+            await _conditionsService.AddDialogConditionAsync(new DialogCondition
+            {
+                DialogId = dialogId,
+                Id = "1",
+                Type = DialogConditionType.Pretrade,
+                Data = new PreTradeParameters {AssetId = "BTC"}.ToJson()
+            });
+
+            var conditions = await _conditionsService.GetDialogConditionsAsync(dialogId);
+            var byType = await _conditionsService.GetDialogConditionsByTypeAsync(DialogConditionType.Pretrade);
+            
+            Assert.Contains(conditions, condition => condition.DialogId == dialogId);
+            Assert.Contains(byType, condition => condition.DialogId == dialogId && condition.Type == DialogConditionType.Pretrade);
+
+            await _service.DeleteDialogAsync(dialogId);
+            
+            conditions = await _conditionsService.GetDialogConditionsAsync(dialogId);
+            byType = await _conditionsService.GetDialogConditionsByTypeAsync(DialogConditionType.Pretrade);
+            
+            Assert.Empty(conditions);
+            Assert.Empty(byType);
         }
         
         private IClientDialog CreateDialog(string id, DialogType type = DialogType.Info, int actionsCount = 1)
