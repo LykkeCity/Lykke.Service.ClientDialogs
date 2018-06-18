@@ -36,9 +36,13 @@ namespace Lykke.Service.ClientDialogs.Controllers
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
+            
+            if (!string.IsNullOrEmpty(request.Id) && !request.Id.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(request.Id)} is invalid");
 
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
+                Id = request.Id,
                 DialogId = request.DialogId,
                 Type = Core.Domain.DialogConditionType.Pretrade,
                 Data = new PreTradeParameters
