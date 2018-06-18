@@ -21,7 +21,7 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="request"></param>
         /// <returns></returns>
         [Delete("/api/conditions")]
-        Task DeleteDialogConditionDAsync([Body] DeleteDialogConditionRequest request);
+        Task DeleteDialogConditionAsync([Body] DeleteDialogConditionRequest request);
         
         /// <summary>
         /// Deletes dialog conditions

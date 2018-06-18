@@ -57,7 +57,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("DeleteDialogCondition")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task DeleteDialogConditionDAsync([FromBody]DeleteDialogConditionRequest request)
+        public async Task DeleteDialogConditionAsync([FromBody]DeleteDialogConditionRequest request)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
