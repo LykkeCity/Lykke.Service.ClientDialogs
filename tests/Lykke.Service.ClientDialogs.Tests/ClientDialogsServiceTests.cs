@@ -30,7 +30,7 @@ namespace Lykke.Service.ClientDialogs.Tests
             var dialogsConditionRepository = new DialogConditionsRepository(new NoSqlTableInMemory<DialogConditionEntity>(),
                 new NoSqlTableInMemory<AzureIndex>());
             _service = new ClientDialogsService(dialogsRepository, submitDialogsRepository, dialogsConditionRepository);
-            _conditionsService = new DialogConditionsService(dialogsConditionRepository, _service);
+            _conditionsService = new DialogConditionsService(dialogsConditionRepository, dialogsRepository);
         }
 
         [Fact]
@@ -170,24 +170,23 @@ namespace Lykke.Service.ClientDialogs.Tests
             await _conditionsService.AddDialogConditionAsync(new DialogCondition
             {
                 DialogId = dialogId,
-                Id = "1",
                 Type = DialogConditionType.Pretrade,
                 Data = new PreTradeParameters {AssetId = "BTC"}.ToJson()
             });
 
-            var conditions = await _conditionsService.GetDialogConditionsAsync(dialogId);
-            var byType = await _conditionsService.GetDialogConditionsByTypeAsync(DialogConditionType.Pretrade);
+            var condition = await _conditionsService.GetDialogConditionAsync(dialogId);
+            var dialog = await _service.GetDialogAsync(dialogId);
             
-            Assert.Contains(conditions, condition => condition.DialogId == dialogId);
-            Assert.Contains(byType, condition => condition.DialogId == dialogId && condition.Type == DialogConditionType.Pretrade);
+            Assert.Equal(dialogId, condition.DialogId);
+            Assert.Equal(DialogConditionType.Pretrade, dialog.ConditionType);
 
-            await _service.DeleteDialogAsync(dialogId);
+            await _conditionsService.DeleteDialogConditionAsync(dialogId);
             
-            conditions = await _conditionsService.GetDialogConditionsAsync(dialogId);
-            byType = await _conditionsService.GetDialogConditionsByTypeAsync(DialogConditionType.Pretrade);
+            condition = await _conditionsService.GetDialogConditionAsync(dialogId);
+            dialog = await _service.GetDialogAsync(dialogId);
             
-            Assert.Empty(conditions);
-            Assert.Empty(byType);
+            Assert.Null(condition);
+            Assert.Null(dialog.ConditionType);
         }
         
         private IClientDialog CreateDialog(string id, DialogType type = DialogType.Info, int actionsCount = 1)

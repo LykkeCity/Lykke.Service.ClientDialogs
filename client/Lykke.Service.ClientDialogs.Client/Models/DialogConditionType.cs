@@ -2,6 +2,7 @@
 {
     public enum DialogConditionType
     {
-        Pretrade
+        Pretrade,
+        Predeposit
     }
 }

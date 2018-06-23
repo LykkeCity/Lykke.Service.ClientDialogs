@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Lykke.Service.ClientDialogs.Client.Models;
 using Refit;
 
@@ -14,35 +13,28 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <returns></returns>
         [Post("/api/conditions/pretrade")]
         Task AddPreTradeDialogConditionDAsync([Body] PreTradeConditionRequest request);
-
+        
         /// <summary>
-        /// Deletes dialog condition
+        /// Adds a predeposit dialog condition
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Delete("/api/conditions")]
-        Task DeleteDialogConditionAsync([Body] DeleteDialogConditionRequest request);
+        [Post("/api/conditions/predeposit")]
+        Task AddPreDepositDialogConditionDAsync([Body] PreDepositConditionRequest request);
         
         /// <summary>
-        /// Deletes dialog conditions
+        /// Deletes dialog condition
         /// </summary>
         /// <param name="dialogId"></param>
         /// <returns></returns>
         [Delete("/api/conditions/{dialogId}")]
-        Task DeleteDialogConditionsAsync(string dialogId);
-
-        /// <summary>
-        /// Gets all conditions by type
-        /// </summary>
-        /// <returns></returns>
-        [Get("/api/conditions/{type}/type")]
-        Task<IReadOnlyList<DialogConditionModel>> GetDialogConditionsByTypeAsync(DialogConditionType type);
+        Task DeleteDialogConditionAsync(string dialogId);
         
         /// <summary>
-        /// Gets all dialog conditions
+        /// Gets dialog condition
         /// </summary>
         /// <returns></returns>
-        [Get("/api/conditions/{dialogId}/dialog")]
-        Task<IReadOnlyList<DialogConditionModel>> GetDialogConditionsAsync(string dialogId);
+        [Get("/api/conditions/{dialogId}")]
+        Task<DialogConditionModel> GetDialogConditionAsync(string dialogId);
     }
 }

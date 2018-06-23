@@ -27,6 +27,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             _clientDialogsService = clientDialogsService;
         }
         
+        /// <summary>
+        /// Adds the dialog
+        /// </summary>
+        /// <remarks>If IsCommon parameter is set to true, then the dialog becomes a common - and will be assigned to all the clients.</remarks>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         [SwaggerOperation("AddDialog")]
@@ -42,6 +48,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return Mapper.Map<ClientDialogModel>(result);
         }
         
+        /// <summary>
+        /// Updates the dialog
+        /// </summary>
+        /// <remarks>If IsCommon parameter is set to true, then the dialog becomes a common - and will be assigned to all the clients.</remarks>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("")]
         [SwaggerOperation("UpdateDialog")]
@@ -62,6 +74,10 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return Mapper.Map<ClientDialogModel>(result);
         }
 
+        /// <summary>
+        /// Gets all dialogs
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("")]
         [SwaggerOperation("GetDialogs")]
@@ -74,6 +90,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return result;
         }
         
+        /// <summary>
+        /// Gets the dialog by Id
+        /// </summary>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{dialogId}")]
         [SwaggerOperation("GetDialog")]
@@ -90,6 +111,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Deletes the dialog
+        /// </summary>
+        /// <remarks>All the client dialogs assignments and dialog conditions will be deleted aswell</remarks>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{dialogId}")]
         [SwaggerOperation("DeleteDialog")]
@@ -103,6 +130,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             await _clientDialogsService.DeleteDialogAsync(dialogId);
         }
 
+        /// <summary>
+        /// Submits the dialog for the specified client and action
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("submit")]
         [SwaggerOperation("SubmitDialog")]
@@ -129,6 +161,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             await _clientDialogsService.SubmitDialogAsync(request.ClientId, request.DialogId, request.ActionId);
         }
 
+        /// <summary>
+        /// Returns dialogs submitted by the client
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{clientId}/submitted")]
         [SwaggerOperation("GetSubmittedDialogs")]
@@ -144,6 +181,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return result;
         }
 
+        
+        /// <summary>
+        /// Checks if the dialog is submitted
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("isSubmitted")]
         [SwaggerOperation("IsDialogSubmitted")]

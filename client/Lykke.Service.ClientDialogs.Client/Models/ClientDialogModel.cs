@@ -18,6 +18,11 @@ namespace Lykke.Service.ClientDialogs.Client.Models
         public DialogType Type { get; set; }
         
         /// <summary>
+        /// Dialog type
+        /// </summary>
+        public DialogConditionType? ConditionType { get; set; }
+        
+        /// <summary>
         /// Is the dialog assigned as a common dialog for all clients
         /// </summary>
         public bool IsCommon { get; set; }

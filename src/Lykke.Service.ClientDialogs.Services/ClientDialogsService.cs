@@ -64,7 +64,7 @@ namespace Lykke.Service.ClientDialogs.Services
             var tasks = new List<Task>
             {
                 _dialogsRepository.DeleteDialogAsync(dialogId),
-                _dialogConditionsRepository.DeleteDialogConditionsAsync(dialogId)
+                _dialogConditionsRepository.DeleteDialogConditionAsync(dialogId)
             };
             
             return Task.WhenAll(tasks);

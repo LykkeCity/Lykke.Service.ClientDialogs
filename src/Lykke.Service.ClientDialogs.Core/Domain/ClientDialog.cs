@@ -6,6 +6,7 @@ namespace Lykke.Service.ClientDialogs.Core.Domain
     {
         public string Id { get; set; }
         public DialogType Type { get; set; }
+        public DialogConditionType? ConditionType { get; set; }
         public bool IsCommon { get; set; }
         public string Header { get; set; }
         public string Text { get; set; }

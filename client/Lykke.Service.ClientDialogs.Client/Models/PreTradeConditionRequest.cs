@@ -2,8 +2,7 @@
 {
     public class PreTradeConditionRequest
     {
-        public string Id { get; set; }
-        public string DialogId { get; set; }
-        public string AssetId { get; set; }
+            public string DialogId { get; set; }
+            public string AssetId { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AzureStorage;
 using AzureStorage.Tables.Templates.Index;
@@ -14,61 +14,56 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.DialogCondition
 
         public DialogConditionsRepository(
             INoSQLTableStorage<DialogConditionEntity> tableStorage,
-            INoSQLTableStorage<AzureIndex> typeIndex)
+            INoSQLTableStorage<AzureIndex> typeIndex
+            )
         {
             _tableStorage = tableStorage;
             _typeIndex = typeIndex;
         }
         
-        public async Task AddDialogConditionAsync(IDialogCondition condition)
+        public Task AddDialogConditionAsync(IDialogCondition condition)
         {
             var entity = DialogConditionEntity.Create(condition);
-            await _tableStorage.InsertOrMergeAsync(entity);
-            
-            var typeIndex = AzureIndex.Create(DialogConditionEntity.GenerateTypeIndexPartitionKey(condition.Type),
-                    entity.Id, DialogConditionEntity.GeneratePartitionKey(condition.DialogId), DialogConditionEntity.GenerateRowKey(entity.Id));
-            await _typeIndex.InsertOrMergeAsync(typeIndex);
-        }
+            var index = AzureIndex.Create(DialogConditionEntity.GenerateIndexPartitionKey(condition.DialogId), condition.DialogId,
+                DialogConditionEntity.GeneratePartitionKey(condition.Type), DialogConditionEntity.GenerateRowKey(condition.DialogId));
 
-        public async Task<IEnumerable<IDialogCondition>> GetDialogConditionsAsync(string dialogId)
-        {
-            return await _tableStorage.GetDataAsync(DialogConditionEntity.GeneratePartitionKey(dialogId));
-        }
-
-        public async Task<IEnumerable<IDialogCondition>> GetDialogConditionsByTypeAsync(DialogConditionType type)
-        {
-            var indexes = await _typeIndex.GetDataAsync(DialogConditionEntity.GenerateTypeIndexPartitionKey(type));
-
-            return await _tableStorage.GetDataAsync(indexes);
-        }
-
-        public async Task<IDialogCondition> GetDialogConditionAsync(string dialogId, string id)
-        {
-            return await _tableStorage.GetDataAsync(DialogConditionEntity.GeneratePartitionKey(dialogId),
-                DialogConditionEntity.GenerateRowKey(id));
-        }
-        
-        public Task DeleteDialogConditionAsync(string dialogId, string id, DialogConditionType type)
-        {
             var tasks = new List<Task>
             {
-                _tableStorage.DeleteIfExistAsync(DialogConditionEntity.GeneratePartitionKey(dialogId),
-                    DialogConditionEntity.GenerateRowKey(id)),
-                _typeIndex.DeleteIfExistAsync(DialogConditionEntity.GenerateTypeIndexPartitionKey(type), id)
+                _tableStorage.InsertOrMergeAsync(entity),
+                _typeIndex.InsertOrMergeAsync(index)
             };
-            
+
             return Task.WhenAll(tasks);
         }
 
-        public async Task DeleteDialogConditionsAsync(string dialogId)
+        public async Task<IEnumerable<IDialogCondition>> GetDialogConditionsAsync(DialogConditionType type)
         {
-            var conditions = (await GetDialogConditionsAsync(dialogId)).ToList();
-            var tasks = new List<Task>();
+            return await _tableStorage.GetDataAsync(DialogConditionEntity.GeneratePartitionKey(type));
+        }
 
-            foreach (var condition in conditions)
+        public async Task<IDialogCondition> GetDialogConditionAsync(string dialogId)
+        {
+            var index = await _typeIndex.GetDataAsync(DialogConditionEntity.GenerateIndexPartitionKey(dialogId),
+                dialogId);
+
+            return await _tableStorage.GetDataAsync(index);
+        }
+        
+        public async Task DeleteDialogConditionAsync(string dialogId)
+        {
+            var index = await _typeIndex.GetDataAsync(DialogConditionEntity.GenerateIndexPartitionKey(dialogId),
+                DialogConditionEntity.GenerateRowKey(dialogId));
+
+            var tasks = new List<Task>
             {
-                tasks.Add(_tableStorage.DeleteIfExistAsync(DialogConditionEntity.GeneratePartitionKey(dialogId), DialogConditionEntity.GenerateRowKey(condition.Id)));
-                tasks.Add(_typeIndex.DeleteIfExistAsync(DialogConditionEntity.GenerateTypeIndexPartitionKey(condition.Type), condition.Id));
+                _typeIndex.DeleteIfExistAsync(DialogConditionEntity.GenerateIndexPartitionKey(dialogId), dialogId)
+            };
+            
+            if (index != null)
+            {
+                var type = Enum.Parse<DialogConditionType>(index.PrimaryPartitionKey);
+                tasks.Add(_tableStorage.DeleteIfExistAsync(DialogConditionEntity.GeneratePartitionKey(type),
+                    DialogConditionEntity.GenerateRowKey(dialogId)));
             }
 
             await Task.WhenAll(tasks);

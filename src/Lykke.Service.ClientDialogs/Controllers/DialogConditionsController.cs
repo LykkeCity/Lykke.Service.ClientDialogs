@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Common;
@@ -13,7 +12,6 @@ using Lykke.Service.ClientDialogs.Core.Services;
 using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using DialogConditionType = Lykke.Service.ClientDialogs.Client.Models.DialogConditionType;
 
 namespace Lykke.Service.ClientDialogs.Controllers
 {
@@ -27,6 +25,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             _dialogConditionsService = dialogConditionsService;
         }
 
+        /// <summary>
+        /// Adds new pretrade dialog condition
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("pretrade")]
         [SwaggerOperation("AddPreTradeDialogCondition")]
@@ -36,13 +39,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
-            
-            if (!string.IsNullOrEmpty(request.Id) && !request.Id.IsValidPartitionOrRowKey())
-                throw new ValidationApiException($"{nameof(request.Id)} is invalid");
 
+            var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
+            
+            if (condition != null)
+                throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
+            
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
-                Id = request.Id,
                 DialogId = request.DialogId,
                 Type = Core.Domain.DialogConditionType.Pretrade,
                 Data = new PreTradeParameters
@@ -51,56 +55,71 @@ namespace Lykke.Service.ClientDialogs.Controllers
                 }.ToJson()
             });
         }
-        
-        [HttpDelete]
-        [Route("")]
-        [SwaggerOperation("DeleteDialogCondition")]
+
+        /// <summary>
+        /// Adds new predeposit dialog condition
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("predeposit")]
+        [SwaggerOperation("AddPreDepositDialogCondition")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task DeleteDialogConditionAsync([FromBody]DeleteDialogConditionRequest request)
+        public async Task AddPreDepositDialogConditionDAsync(PreDepositConditionRequest request)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
 
-            await _dialogConditionsService.DeleteDialogConditionAsync(request.DialogId, request.ConditionId, 
-                Mapper.Map<Core.Domain.DialogConditionType>(request.Type));
+            var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
+            
+            if (condition != null)
+                throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
+            
+            await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
+            {
+                DialogId = request.DialogId,
+                Type = Core.Domain.DialogConditionType.Predeposit,
+                Data = new PreDepositParameters
+                {
+                    AssetIds = request.AssetIds
+                }.ToJson()
+            });
         }
 
+        /// <summary>
+        /// Deletes dialog condition
+        /// </summary>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{dialogId}")]
-        [SwaggerOperation("DeleteDialogConditions")]
+        [SwaggerOperation("DeleteDialogCondition")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task DeleteDialogConditionsAsync(string dialogId)
+        public async Task DeleteDialogConditionAsync(string dialogId)
         {
             if (!dialogId.IsValidPartitionOrRowKey())
                 throw new ValidationApiException($"{nameof(dialogId)} is invalid");
 
-            await _dialogConditionsService.DeleteDialogConditionsAsync(dialogId);
+            await _dialogConditionsService.DeleteDialogConditionAsync(dialogId);
         }
 
+        /// <summary>
+        /// Gets dialog condition
+        /// </summary>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("{type}/type")]
-        [SwaggerOperation("GetConditionsByType")]
-        [ProducesResponseType(typeof(IReadOnlyList<DialogConditionModel>), (int) HttpStatusCode.OK)]
+        [Route("{dialogId}")]
+        [SwaggerOperation("GetDialogCondition")]
+        [ProducesResponseType(typeof(DialogConditionModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IReadOnlyList<DialogConditionModel>> GetDialogConditionsByTypeAsync(DialogConditionType type)
+        public async Task<DialogConditionModel> GetDialogConditionAsync(string dialogId)
         {
-            var conditions = await _dialogConditionsService.GetDialogConditionsByTypeAsync(Mapper.Map<Core.Domain.DialogConditionType>(type));
+            var condition = await _dialogConditionsService.GetDialogConditionAsync(dialogId);
 
-            return Mapper.Map<IReadOnlyList<DialogConditionModel>>(conditions);
-        }
-        
-        [HttpGet]
-        [Route("{dialogId}/dialog")]
-        [SwaggerOperation("GetDialogConditions")]
-        [ProducesResponseType(typeof(IReadOnlyList<DialogConditionModel>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IReadOnlyList<DialogConditionModel>> GetDialogConditionsAsync(string dialogId)
-        {
-            var conditions = await _dialogConditionsService.GetDialogConditionsAsync(dialogId);
-
-            return Mapper.Map<IReadOnlyList<DialogConditionModel>>(conditions);
+            return Mapper.Map<DialogConditionModel>(condition);
         }
     }
 }
