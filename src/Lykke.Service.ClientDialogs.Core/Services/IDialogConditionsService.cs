@@ -7,11 +7,8 @@ namespace Lykke.Service.ClientDialogs.Core.Services
     public interface IDialogConditionsService
     {
         Task<IEnumerable<IClientDialog>> GetDialogsWithPreTradeConditionAsync(string clientId, string assetId);
-        Task<IEnumerable<IDialogCondition>> GetDialogConditionsAsync(string dialogId);
-        Task<IEnumerable<IDialogCondition>> GetDialogConditionsByTypeAsync(DialogConditionType type);
-        Task<IDialogCondition> GetDialogConditionAsync(string dialogId, string id);
+        Task<IDialogCondition> GetDialogConditionAsync(string dialogId);
         Task AddDialogConditionAsync(IDialogCondition condition);
-        Task DeleteDialogConditionAsync(string dialogId, string id, DialogConditionType type);
-        Task DeleteDialogConditionsAsync(string dialogId);
+        Task DeleteDialogConditionAsync(string dialogId);
     }
 }

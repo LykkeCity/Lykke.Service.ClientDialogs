@@ -70,6 +70,17 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
             await Task.WhenAny(tasks);
         }
 
+        public Task SetDialogConditionTypeAsync(string dialogId, DialogConditionType? type)
+        {
+            return _tableStorage.ReplaceAsync(ClientDialogEntity.GeneratePartitionKey(),
+                ClientDialogEntity.GenerateRowKey(dialogId),
+                entity =>
+                {
+                    entity.ConditionType = type;
+                    return entity;
+                });
+        }
+
         public async Task<IEnumerable<IClientDialog>> GetClientDialogsAsync(string clientId)
         {
             var indexes = (await _clientDialogIndex.GetDataAsync(clientId)).ToList();

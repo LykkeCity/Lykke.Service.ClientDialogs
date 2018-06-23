@@ -11,6 +11,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
     {
         public string Id { get; set; }
         public DialogType Type { get; set; }
+        public DialogConditionType? ConditionType { get; set; }
         public bool IsCommon { get; set; }
         public string Header { get; set; }
         public string Text { get; set; }
@@ -35,6 +36,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
                 RowKey = GenerateRowKey(id),
                 Id = id,
                 Type = dialog.Type,
+                ConditionType = dialog.ConditionType,
                 IsCommon = dialog.IsCommon,
                 Header = dialog.Header,
                 Text = dialog.Text,

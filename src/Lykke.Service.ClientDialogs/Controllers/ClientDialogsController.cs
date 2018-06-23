@@ -29,6 +29,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             _dialogConditionsService = dialogConditionsService;
         }
         
+        /// <summary>
+        /// Gets all client dialogs
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{clientId}")]
         [SwaggerOperation("GetDialogs")]
@@ -44,6 +49,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Gets client dialog by Id
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="dialogId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{clientId}/{dialogId}")]
         [SwaggerOperation("GetDialog")]
@@ -63,6 +74,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Assigns the dialog to the specified client
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         [SwaggerOperation("AssignDialogToClient")]
@@ -76,6 +92,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             await _clientDialogsService.AssignDialogToClientAsync(request.ClientId, request.DialogId);
         }
 
+        /// <summary>
+        /// Deletes client dialog (unassigns dialog from the client)
+        /// </summary>
+        /// <remarks>This method unassigns dialog from the client</remarks>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("")]
         [SwaggerOperation("DeleteDialog")]
@@ -89,6 +111,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
             await _clientDialogsService.DeleteDialogAsync(request.ClientId, request.DialogId);
         }
         
+        /// <summary>
+        /// Gets pretrade client dialogs for specified asset id
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{clientId}/{assetId}/pretrade")]
         [SwaggerOperation("GetPreTradeDialogs")]
