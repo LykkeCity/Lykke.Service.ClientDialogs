@@ -12,6 +12,7 @@ using Lykke.Service.ClientDialogs.Core.Services;
 using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using DialogConditionType = Lykke.Service.ClientDialogs.Core.Domain.DialogConditionType;
 
 namespace Lykke.Service.ClientDialogs.Controllers
 {
@@ -42,7 +43,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
 
             var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
             
-            if (condition != null)
+            if (condition != null && condition.Type != DialogConditionType.Pretrade)
                 throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
             
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
@@ -73,13 +74,13 @@ namespace Lykke.Service.ClientDialogs.Controllers
 
             var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
             
-            if (condition != null)
+            if (condition != null && condition.Type != DialogConditionType.Predeposit)
                 throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
             
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
                 DialogId = request.DialogId,
-                Type = Core.Domain.DialogConditionType.Predeposit,
+                Type = DialogConditionType.Predeposit,
                 Data = new PreDepositParameters
                 {
                     AssetIds = request.AssetIds
