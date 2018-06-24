@@ -1,9 +1,13 @@
-﻿using Lykke.Service.ClientDialogs.Core.Domain;
+﻿using Lykke.AzureStorage.Tables;
+using Lykke.AzureStorage.Tables.Entity.Annotation;
+using Lykke.AzureStorage.Tables.Entity.ValueTypesMerging;
+using Lykke.Service.ClientDialogs.Core.Domain;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Lykke.Service.ClientDialogs.AzureRepositories.DialogCondition
 {
-    public class DialogConditionEntity : TableEntity, IDialogCondition
+    [ValueTypeMergingStrategy(ValueTypeMergingStrategy.UpdateAlways)]
+    public class DialogConditionEntity : AzureTableEntity, IDialogCondition
     {
         public string DialogId { get; set; }
         public DialogConditionType Type { get; set; }
