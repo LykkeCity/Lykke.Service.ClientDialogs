@@ -67,7 +67,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("AddPreDepositDialogCondition")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task AddPreDepositDialogConditionDAsync(PreDepositConditionRequest request)
+        public async Task AddPreDepositDialogConditionAsync(PreDepositConditionRequest request)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
