@@ -12,16 +12,8 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="request"></param>
         /// <returns></returns>
         [Post("/api/conditions/pretrade")]
-        Task AddPreTradeDialogConditionDAsync([Body] PreTradeConditionRequest request);
-        
-        /// <summary>
-        /// Adds a predeposit dialog condition
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [Post("/api/conditions/predeposit")]
-        Task AddPreDepositDialogConditionDAsync([Body] PreDepositConditionRequest request);
-        
+        Task AddPreTradeDialogConditionAsync([Body] PreTradeConditionRequest request);
+
         /// <summary>
         /// Deletes dialog condition
         /// </summary>

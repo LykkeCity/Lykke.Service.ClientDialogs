@@ -36,7 +36,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("AddPreTradeDialogCondition")]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task AddPreTradeDialogConditionDAsync([FromBody]PreTradeConditionRequest request)
+        public async Task AddPreTradeDialogConditionAsync([FromBody]PreTradeConditionRequest request)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
@@ -49,7 +49,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
                 DialogId = request.DialogId,
-                Type = Core.Domain.DialogConditionType.Pretrade,
+                Type = DialogConditionType.Pretrade,
                 Data = new PreTradeParameters
                 {
                     AssetId = request.AssetId
