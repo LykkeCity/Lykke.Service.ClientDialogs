@@ -79,9 +79,18 @@ namespace Lykke.Service.ClientDialogs.Services
             return clientDialogs.Where(item => submittedDialogs.All(i => i.DialogId != item.Id));
         }
 
-        public Task<IClientDialog> GetClientDialogAsync(string clientId, string dialogId)
+        public async Task<IClientDialog> GetClientDialogAsync(string clientId, string dialogId)
         {
-            return _dialogsRepository.GetClientDialogAsync(clientId, dialogId);
+            var clientDialog = await _dialogsRepository.GetClientDialogAsync(clientId, dialogId);
+            
+            var submittedDialogIds = (await _dialogSubmitsRepository.GetSubmittedDialogsAsync(clientId))
+                .Select(item => item.DialogId);
+
+            //don't return submitted dialog
+            if (submittedDialogIds.Contains(dialogId))
+                return null;
+            
+            return clientDialog;
         }
 
         public Task AssignDialogToClientAsync(string clientId, string dialogId)
