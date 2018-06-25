@@ -48,5 +48,14 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <returns></returns>
         [Get("/api/clientdialogs/{clientId}/{assetId}/pretrade")]
         Task<IReadOnlyList<ClientDialogModel>> GetPreTradeDialogsAsync(string clientId, string assetId);
+        
+        /// <summary>
+        /// Gets predeposit client dialogs for asset
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        [Get("/api/clientdialogs/{clientId}/{assetId}/predeposit")]
+        Task<IReadOnlyList<ClientDialogModel>> GetPreDepositDialogsAsync(string clientId, string assetId);
     }
 }

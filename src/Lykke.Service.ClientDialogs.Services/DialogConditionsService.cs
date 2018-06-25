@@ -30,6 +30,16 @@ namespace Lykke.Service.ClientDialogs.Services
                 conditions.Any(x => x.DialogId == item.Id && x.Data.GetConditionParameters<PreTradeParameters>().AssetId == assetId));
         }
 
+        public async Task<IEnumerable<IClientDialog>> GetDialogsWithPreDepositConditionAsync(string clientId, string assetId)
+        {
+            IEnumerable<IDialogCondition> conditions = await _conditionsRepository.GetDialogConditionsAsync(DialogConditionType.Predeposit);
+            var clientDialogs = await _clientDialogsRepository.GetClientDialogsAsync(clientId);
+
+            return clientDialogs.Where(item =>
+                conditions.Any(x => x.DialogId == item.Id && x.Data.GetConditionParameters<PreDepositParameters>()
+                                        .AssetIds.Any(a => a == assetId)));
+        }
+
         public Task<IDialogCondition> GetDialogConditionAsync(string dialogId)
         {
             return _conditionsRepository.GetDialogConditionAsync(dialogId);

@@ -130,5 +130,25 @@ namespace Lykke.Service.ClientDialogs.Controllers
             var dialogs = await _dialogConditionsService.GetDialogsWithPreTradeConditionAsync(clientId, assetId);
             return Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
         }
+        
+        /// <summary>
+        /// Gets predeposit client dialogs for specified asset id
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="assetId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{clientId}/{assetId}/predeposit")]
+        [SwaggerOperation("GetPreDepositDialogs")]
+        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
+        public async Task<IReadOnlyList<ClientDialogModel>> GetPreDepositDialogsAsync(string clientId, string assetId)
+        {
+            if (!clientId.IsValidPartitionOrRowKey())
+                throw new ValidationApiException($"{nameof(clientId)} is invalid");
+
+            var dialogs = await _dialogConditionsService.GetDialogsWithPreDepositConditionAsync(clientId, assetId);
+            return Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
+        }
     }
 }
