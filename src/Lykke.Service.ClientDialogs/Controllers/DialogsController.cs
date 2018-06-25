@@ -43,7 +43,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
 
-            IClientDialog dialog = Mapper.Map<IClientDialog>(model);
+            IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
             return Mapper.Map<ClientDialogModel>(result);
         }
@@ -69,7 +69,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
             if (existingDialog == null)
                 throw new ValidationApiException("Dialog not found");
             
-            IClientDialog dialog = Mapper.Map<IClientDialog>(model);
+            IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
             return Mapper.Map<ClientDialogModel>(result);
         }
