@@ -96,6 +96,11 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
 
         public async Task<IClientDialog> GetClientDialogAsync(string clientId, string dialogId)
         {
+            var dialog = await GetDialogAsync(dialogId);
+            
+            if (dialog != null && dialog.IsCommon)
+                return dialog;
+            
             var index = await _clientDialogIndex.GetDataAsync(clientId, dialogId);
             
             return index == null 
