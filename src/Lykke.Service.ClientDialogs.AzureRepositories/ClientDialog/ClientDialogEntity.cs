@@ -12,12 +12,12 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
         public string Id { get; set; }
         public DialogType Type { get; set; }
         public DialogConditionType? ConditionType { get; set; }
-        public bool IsCommon { get; set; }
+        public bool IsGlobal { get; set; }
         public string Header { get; set; }
         public string Text { get; set; }
         public DialogAction[] Actions { get; set; }
         
-        internal static string GenerateCommonDialogPartitionKey() => "CommonDialog";
+        internal static string GenerateGlobalDialogPartitionKey() => "GlobalDialog";
         
         internal static string GeneratePartitionKey() => "Dialog";
         internal static string GenerateDialogIndex(string dialogId) => $"DialogIndex_{dialogId}";
@@ -37,7 +37,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
                 Id = id,
                 Type = dialog.Type,
                 ConditionType = dialog.ConditionType,
-                IsCommon = dialog.IsCommon,
+                IsGlobal = dialog.IsGlobal,
                 Header = dialog.Header,
                 Text = dialog.Text,
                 Actions = dialog.Actions

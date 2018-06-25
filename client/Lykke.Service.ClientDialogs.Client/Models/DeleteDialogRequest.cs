@@ -7,7 +7,7 @@
     {
         /// <summary>
         /// Client Id
-        /// <remarks>null for common dialog</remarks>
+        /// <remarks>null for global dialog</remarks>
         /// </summary>
         public string ClientId { get; set; }
         

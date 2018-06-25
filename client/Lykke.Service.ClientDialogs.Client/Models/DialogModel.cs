@@ -5,7 +5,7 @@ namespace Lykke.Service.ClientDialogs.Client.Models
     /// <summary>
     /// Client dialog
     /// </summary>
-    public class ClientDialogModel
+    public class DialogModel
     {
         /// <summary>
         /// Dialog id
@@ -21,6 +21,11 @@ namespace Lykke.Service.ClientDialogs.Client.Models
         /// Dialog type
         /// </summary>
         public DialogConditionType? ConditionType { get; set; }
+        
+        /// <summary>
+        /// Is the dialog assigned as a global dialog for all clients
+        /// </summary>
+        public bool IsGlobal { get; set; }
         
         /// <summary>
         /// Dialog title

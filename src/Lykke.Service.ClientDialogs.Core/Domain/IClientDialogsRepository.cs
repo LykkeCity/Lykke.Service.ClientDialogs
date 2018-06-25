@@ -9,7 +9,7 @@ namespace Lykke.Service.ClientDialogs.Core.Domain
         Task<IEnumerable<IClientDialog>> GetDialogsAsync();
         Task<IClientDialog> GetDialogAsync(string dialogId);
         Task AssignDialogToAllAsync(string dialogId);
-        Task UnAssignCommonDialogAsync(string dialogId);
+        Task UnAssignGlobalDialogAsync(string dialogId);
         Task DeleteDialogAsync(string dialogId);
         Task SetDialogConditionTypeAsync(string dialogId, DialogConditionType? type);
         
@@ -18,6 +18,6 @@ namespace Lykke.Service.ClientDialogs.Core.Domain
         Task AssignDialogToClientAsync(string clientId, string dialogId);
         Task DeleteDialogAsync(string clientId, string dialogId);
         
-        Task<IEnumerable<IClientDialog>> GetCommonDialogsAsync();
+        Task<IEnumerable<IClientDialog>> GetGlobalDialogsAsync();
     }
 }

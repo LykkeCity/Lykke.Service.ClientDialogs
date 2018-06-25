@@ -11,15 +11,15 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
     {
         private readonly INoSQLTableStorage<ClientDialogEntity> _tableStorage;
         private readonly INoSQLTableStorage<AzureIndex> _clientDialogIndex;
-        private readonly INoSQLTableStorage<AzureIndex> _commonDialogIndex;
+        private readonly INoSQLTableStorage<AzureIndex> _globalDialogIndex;
 
         public ClientDialogsRepository(INoSQLTableStorage<ClientDialogEntity> tableStorage,
             INoSQLTableStorage<AzureIndex> clientDialogIndex,
-            INoSQLTableStorage<AzureIndex> commonDialogIndex)
+            INoSQLTableStorage<AzureIndex> globalDialogIndex)
         {
             _tableStorage = tableStorage;
             _clientDialogIndex = clientDialogIndex;
-            _commonDialogIndex = commonDialogIndex;
+            _globalDialogIndex = globalDialogIndex;
         }
 
         public async Task<IClientDialog> AddDialogAsync(IClientDialog clientDialog)
@@ -42,13 +42,13 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
 
         public Task AssignDialogToAllAsync(string dialogId)
         {
-            var indexEntity = CreateCommonDialogIndex(dialogId);
-            return _commonDialogIndex.InsertOrMergeAsync(indexEntity);
+            var indexEntity = CreateGlobalDialogIndex(dialogId);
+            return _globalDialogIndex.InsertOrMergeAsync(indexEntity);
         }
 
-        public Task UnAssignCommonDialogAsync(string dialogId)
+        public Task UnAssignGlobalDialogAsync(string dialogId)
         {
-            return _commonDialogIndex.DeleteIfExistAsync(ClientDialogEntity.GenerateCommonDialogPartitionKey(), dialogId);
+            return _globalDialogIndex.DeleteIfExistAsync(ClientDialogEntity.GenerateGlobalDialogPartitionKey(), dialogId);
         }
 
         public async Task DeleteDialogAsync(string dialogId)
@@ -65,7 +65,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
                 tasks.Add(_clientDialogIndex.DeleteIfExistAsync(ClientDialogEntity.GenerateDialogIndex(dialogId), index.RowKey));
             }
             
-            tasks.Add(UnAssignCommonDialogAsync(dialogId));
+            tasks.Add(UnAssignGlobalDialogAsync(dialogId));
 
             await Task.WhenAny(tasks);
         }
@@ -86,10 +86,10 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
             var indexes = (await _clientDialogIndex.GetDataAsync(clientId)).ToList();
             var clientDialogs = (await _tableStorage.GetDataAsync(indexes)).ToList();
             
-            var commonIndexes = (await _commonDialogIndex.GetDataAsync(ClientDialogEntity.GenerateCommonDialogPartitionKey())).ToList();
-            var commonDialogs = (await _tableStorage.GetDataAsync(commonIndexes)).ToList();
+            var globalIndexes = (await _globalDialogIndex.GetDataAsync(ClientDialogEntity.GenerateGlobalDialogPartitionKey())).ToList();
+            var globalDialogs = (await _tableStorage.GetDataAsync(globalIndexes)).ToList();
 
-            clientDialogs.AddRange(commonDialogs.Where(item=> clientDialogs.All(x => x.Id != item.Id)));
+            clientDialogs.AddRange(globalDialogs.Where(item=> clientDialogs.All(x => x.Id != item.Id)));
 
             return clientDialogs;
         }
@@ -98,7 +98,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
         {
             var dialog = await GetDialogAsync(dialogId);
             
-            if (dialog != null && dialog.IsCommon)
+            if (dialog != null && dialog.IsGlobal)
                 return dialog;
             
             var index = await _clientDialogIndex.GetDataAsync(clientId, dialogId);
@@ -133,9 +133,9 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
             return Task.WhenAll(tasks);
         }
 
-        public async Task<IEnumerable<IClientDialog>> GetCommonDialogsAsync()
+        public async Task<IEnumerable<IClientDialog>> GetGlobalDialogsAsync()
         {
-            var indexes = await _commonDialogIndex.GetDataAsync(ClientDialogEntity.GenerateCommonDialogPartitionKey());
+            var indexes = await _globalDialogIndex.GetDataAsync(ClientDialogEntity.GenerateGlobalDialogPartitionKey());
             return await _tableStorage.GetDataAsync(indexes);
         }
 
@@ -149,9 +149,9 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
             return AzureIndex.Create(ClientDialogEntity.GenerateDialogIndex(dialogId), clientId, ClientDialogEntity.GeneratePartitionKey(), dialogId);
         }
         
-        private AzureIndex CreateCommonDialogIndex(string dialogId)
+        private AzureIndex CreateGlobalDialogIndex(string dialogId)
         {
-            return AzureIndex.Create(ClientDialogEntity.GenerateCommonDialogPartitionKey(), dialogId, 
+            return AzureIndex.Create(ClientDialogEntity.GenerateGlobalDialogPartitionKey(), dialogId, 
                 ClientDialogEntity.GeneratePartitionKey(), dialogId);
         }
     }

@@ -57,23 +57,23 @@ namespace Lykke.Service.ClientDialogs.Tests
         }
         
         [Fact]
-        public async Task Is_Common_Dialog_Added_And_Removed()
+        public async Task Is_Global_Dialog_Added_And_Removed()
         {
             const string dialogId = "1";
             await AddDialogAsync(dialogId);
 
             await _service.AssignDialogToAllAsync(dialogId);
 
-            IClientDialog[] commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+            IClientDialog[] globalDialogs = (await _service.GetGlobalDialogsAsync()).ToArray();
 
-            Assert.True(commonDialogs.Length == 1);
-            Assert.Contains(commonDialogs, item => item.Id == dialogId);
+            Assert.True(globalDialogs.Length == 1);
+            Assert.Contains(globalDialogs, item => item.Id == dialogId);
 
-            await _service.UnAssignCommonDialogAsync(dialogId);
+            await _service.UnAssignGlobalDialogAsync(dialogId);
             
-            commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+            globalDialogs = (await _service.GetGlobalDialogsAsync()).ToArray();
 
-            Assert.Empty(commonDialogs);
+            Assert.Empty(globalDialogs);
         }
         
         [Fact]
@@ -108,20 +108,20 @@ namespace Lykke.Service.ClientDialogs.Tests
             await _service.AssignDialogToAllAsync(dialogId);
 
             IClientDialog clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
-            IClientDialog[] commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+            IClientDialog[] globalDialogs = (await _service.GetGlobalDialogsAsync()).ToArray();
             
             Assert.NotNull(clientDialog);
             Assert.Equal(dialogId, clientDialog.Id);
-            Assert.NotEmpty(commonDialogs);
-            Assert.Contains(commonDialogs, x => x.Id == dialogId);
+            Assert.NotEmpty(globalDialogs);
+            Assert.Contains(globalDialogs, x => x.Id == dialogId);
 
             await _service.DeleteDialogAsync(dialogId);
 
             clientDialog = await _service.GetClientDialogAsync(ClientId, dialogId);
-            commonDialogs = (await _service.GetCommonDialogsAsync()).ToArray();
+            globalDialogs = (await _service.GetGlobalDialogsAsync()).ToArray();
             
             Assert.Null(clientDialog);
-            Assert.Empty(commonDialogs);
+            Assert.Empty(globalDialogs);
         }
         
         [Fact]
@@ -141,7 +141,7 @@ namespace Lykke.Service.ClientDialogs.Tests
         }
         
         [Fact]
-        public async Task Is_Common_Dialog_Submitted_And_Removed_For_Client()
+        public async Task Is_Global_Dialog_Submitted_And_Removed_For_Client()
         {
             const string dialogId = "1";
 

@@ -27,13 +27,13 @@ namespace Lykke.Service.ClientDialogs.Services
         {
             var dialog = await _dialogsRepository.AddDialogAsync(clientDialog);
 
-            if (dialog.IsCommon)
+            if (dialog.IsGlobal)
             {
                 await _dialogsRepository.AssignDialogToAllAsync(dialog.Id);
             }
             else
             {
-                await _dialogsRepository.UnAssignCommonDialogAsync(dialog.Id);
+                await _dialogsRepository.UnAssignGlobalDialogAsync(dialog.Id);
             }
 
             return dialog;
@@ -54,9 +54,9 @@ namespace Lykke.Service.ClientDialogs.Services
             return _dialogsRepository.AssignDialogToAllAsync(dialogId);
         }
 
-        public Task UnAssignCommonDialogAsync(string dialogId)
+        public Task UnAssignGlobalDialogAsync(string dialogId)
         {
-            return _dialogsRepository.UnAssignCommonDialogAsync(dialogId);
+            return _dialogsRepository.UnAssignGlobalDialogAsync(dialogId);
         }
 
         public Task DeleteDialogAsync(string dialogId)
@@ -110,9 +110,9 @@ namespace Lykke.Service.ClientDialogs.Services
             return _dialogSubmitsRepository.IsDialogSubmittedAsync(clientId, dialogId, actionId);
         }
 
-        public Task<IEnumerable<IClientDialog>> GetCommonDialogsAsync()
+        public Task<IEnumerable<IClientDialog>> GetGlobalDialogsAsync()
         {
-            return _dialogsRepository.GetCommonDialogsAsync();
+            return _dialogsRepository.GetGlobalDialogsAsync();
         }
     }
 }

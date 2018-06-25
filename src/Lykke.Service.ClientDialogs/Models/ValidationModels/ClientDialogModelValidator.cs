@@ -7,7 +7,7 @@ using Lykke.Service.ClientDialogs.Client.Models;
 namespace Lykke.Service.ClientDialogs.Models.ValidationModels
 {
     [UsedImplicitly]
-    public class ClientDialogModelValidator : AbstractValidator<ClientDialogModel>
+    public class ClientDialogModelValidator : AbstractValidator<DialogModel>
     {
         public ClientDialogModelValidator()
         {

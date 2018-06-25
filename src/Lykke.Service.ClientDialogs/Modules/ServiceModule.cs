@@ -30,7 +30,7 @@ namespace Lykke.Service.ClientDialogs.Modules
                 new ClientDialogsRepository(AzureTableStorage<ClientDialogEntity>.Create(
                     _appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "Dialogs", _log),
                     AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "ClientDialogs", _log),
-                    AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "CommonDialogs", _log)
+                    AzureTableStorage<AzureIndex>.Create(_appSettings.ConnectionString(x => x.ClientDialogsService.Db.DataConnString), "GlobalDialogs", _log)
                     )
             ).As<IClientDialogsRepository>().SingleInstance();
             

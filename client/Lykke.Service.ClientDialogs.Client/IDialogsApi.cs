@@ -16,7 +16,7 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="model"></param>
         /// <returns></returns>
         [Post("/api/dialogs")]
-        Task<ClientDialogModel> AddDialogAsync([Body]ClientDialogModel model);
+        Task<DialogModel> AddDialogAsync([Body]DialogModel model);
         
         /// <summary>
         /// Updates new dialog
@@ -24,14 +24,14 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="model"></param>
         /// <returns></returns>
         [Put("/api/dialogs")]
-        Task<ClientDialogModel> UpdateDialogAsync([Body]ClientDialogModel model);
+        Task<DialogModel> UpdateDialogAsync([Body]DialogModel model);
                 
         /// <summary>
         /// Gets all dialogs
         /// </summary>
         /// <returns></returns>
         [Get("/api/dialogs")]
-        Task<IReadOnlyList<ClientDialogModel>> GetDialogsAsync();
+        Task<IReadOnlyList<DialogModel>> GetDialogsAsync();
         
         /// <summary>
         /// Gets dialog by id
@@ -39,10 +39,10 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="dialogId"></param>
         /// <returns></returns>
         [Get("/api/dialogs/{dialogId}")]
-        Task<ClientDialogModel> GetDialogAsync(string dialogId);
+        Task<DialogModel> GetDialogAsync(string dialogId);
         
         /// <summary>
-        /// Deletes dialog and assignments (client and common)
+        /// Deletes dialog and assignments (client and global)
         /// </summary>
         /// <param name="dialogId"></param>
         /// <returns></returns>

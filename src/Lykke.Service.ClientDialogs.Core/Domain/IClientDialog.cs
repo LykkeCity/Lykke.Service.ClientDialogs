@@ -7,7 +7,7 @@ namespace Lykke.Service.ClientDialogs.Core.Domain
         string Id { get; }
         DialogType Type { get; }
         DialogConditionType? ConditionType { get; }
-        bool IsCommon { get; }
+        bool IsGlobal { get; }
         string Header { get; }
         string Text { get; }
         DialogAction[] Actions { get; }

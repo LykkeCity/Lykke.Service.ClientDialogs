@@ -8,7 +8,7 @@ namespace Lykke.Service.ClientDialogs.Client
     public interface IClientDialogsApi
     {
         /// <summary>
-        /// Gets client dialogs including common dialogs
+        /// Gets client dialogs including global dialogs
         /// </summary>
         /// <param name="clientId"></param>
         /// <returns></returns>

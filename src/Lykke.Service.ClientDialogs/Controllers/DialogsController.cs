@@ -30,36 +30,36 @@ namespace Lykke.Service.ClientDialogs.Controllers
         /// <summary>
         /// Adds the dialog
         /// </summary>
-        /// <remarks>If IsCommon parameter is set to true, then the dialog becomes a common - and will be assigned to all the clients.</remarks>
+        /// <remarks>If IsGlobal parameter is set to true, then the dialog becomes a global - and will be assigned to all the clients.</remarks>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("")]
         [SwaggerOperation("AddDialog")]
-        [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DialogModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<ClientDialogModel> AddDialogAsync([FromBody][CustomizeValidator(RuleSet = "new")]ClientDialogModel model)
+        public async Task<DialogModel> AddDialogAsync([FromBody][CustomizeValidator(RuleSet = "new")]DialogModel model)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
 
             IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
-            return Mapper.Map<ClientDialogModel>(result);
+            return Mapper.Map<DialogModel>(result);
         }
         
         /// <summary>
         /// Updates the dialog
         /// </summary>
-        /// <remarks>If IsCommon parameter is set to true, then the dialog becomes a common - and will be assigned to all the clients.</remarks>
+        /// <remarks>If IsGlobal parameter is set to true, then the dialog becomes a global - and will be assigned to all the clients.</remarks>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("")]
         [SwaggerOperation("UpdateDialog")]
-        [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DialogModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<ClientDialogModel> UpdateDialogAsync([FromBody][CustomizeValidator(RuleSet = "*")]ClientDialogModel model)
+        public async Task<DialogModel> UpdateDialogAsync([FromBody][CustomizeValidator(RuleSet = "*")]DialogModel model)
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
@@ -71,7 +71,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
             
             IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
-            return Mapper.Map<ClientDialogModel>(result);
+            return Mapper.Map<DialogModel>(result);
         }
 
         /// <summary>
@@ -81,12 +81,12 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("")]
         [SwaggerOperation("GetDialogs")]
-        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<DialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<IReadOnlyList<ClientDialogModel>> GetDialogsAsync()
+        public async Task<IReadOnlyList<DialogModel>> GetDialogsAsync()
         {
             IEnumerable<IClientDialog> dialogs = await _clientDialogsService.GetDialogsAsync();
-            var result = Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
+            var result = Mapper.Map<IReadOnlyList<DialogModel>>(dialogs);
             return result;
         }
         
@@ -98,16 +98,16 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{dialogId}")]
         [SwaggerOperation("GetDialog")]
-        [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DialogModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.InternalServerError)]
-        public async Task<ClientDialogModel> GetDialogAsync(string dialogId)
+        public async Task<DialogModel> GetDialogAsync(string dialogId)
         {
             if (!dialogId.IsValidPartitionOrRowKey())
                 throw new ValidationApiException($"{nameof(dialogId)} is invalid");
             
             IClientDialog dialog = await _clientDialogsService.GetDialogAsync(dialogId);
-            ClientDialogModel result = Mapper.Map<ClientDialogModel>(dialog);
+            DialogModel result = Mapper.Map<DialogModel>(dialog);
             return result;
         }
 

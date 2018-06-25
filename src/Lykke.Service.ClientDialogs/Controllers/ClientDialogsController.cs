@@ -37,7 +37,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{clientId}")]
         [SwaggerOperation("GetDialogs")]
-        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<DialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<IReadOnlyList<ClientDialogModel>> GetDialogsAsync(string clientId)
         {
@@ -45,8 +45,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
                 throw new ValidationApiException($"{nameof(clientId)} is invalid");
             
             IEnumerable<IClientDialog> dialogs = await _clientDialogsService.GetClientDialogsAsync(clientId);
-            var result = Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
-            return result;
+            return Mapper.Map<IReadOnlyList<ClientDialogModel>>(dialogs);
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{clientId}/{dialogId}")]
         [SwaggerOperation("GetDialog")]
-        [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DialogModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(void), (int) HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<ClientDialogModel> GetDialogAsync(string clientId, string dialogId)
@@ -70,8 +69,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
                 throw new ValidationApiException($"{nameof(dialogId)} is invalid");
 
             IClientDialog dialog = await _clientDialogsService.GetClientDialogAsync(clientId, dialogId);
-            ClientDialogModel result = Mapper.Map<ClientDialogModel>(dialog);
-            return result;
+            return Mapper.Map<ClientDialogModel>(dialog);
         }
 
         /// <summary>
@@ -82,7 +80,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpPost]
         [Route("")]
         [SwaggerOperation("AssignDialogToClient")]
-        [ProducesResponseType(typeof(ClientDialogModel), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DialogModel), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task AssignDialogToClientAsync([FromBody]AssignDialogRequest request)
         {
@@ -120,7 +118,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{clientId}/{assetId}/pretrade")]
         [SwaggerOperation("GetPreTradeDialogs")]
-        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<DialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<IReadOnlyList<ClientDialogModel>> GetPreTradeDialogsAsync(string clientId, string assetId)
         {
@@ -140,7 +138,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [HttpGet]
         [Route("{clientId}/{assetId}/predeposit")]
         [SwaggerOperation("GetPreDepositDialogs")]
-        [ProducesResponseType(typeof(IReadOnlyList<ClientDialogModel>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<DialogModel>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<IReadOnlyList<ClientDialogModel>> GetPreDepositDialogsAsync(string clientId, string assetId)
         {
