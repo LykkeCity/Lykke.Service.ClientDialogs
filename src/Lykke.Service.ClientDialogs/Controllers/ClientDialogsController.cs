@@ -104,7 +104,15 @@ namespace Lykke.Service.ClientDialogs.Controllers
         public async Task DeleteDialogAsync([FromBody]DeleteDialogRequest request)
         {
             if (!ModelState.IsValid)
-            throw new ValidationApiException(ModelState.GetErrorMessage());
+                throw new ValidationApiException(ModelState.GetErrorMessage());
+
+            var dialog = await _clientDialogsService.GetDialogAsync(request.DialogId);
+            
+            if (dialog == null)
+                throw new ValidationApiException("dialog not found");
+            
+            if (dialog.IsGlobal)
+                throw new ValidationApiException("Global dialog can't be deleted");
             
             await _clientDialogsService.DeleteDialogAsync(request.ClientId, request.DialogId);
         }

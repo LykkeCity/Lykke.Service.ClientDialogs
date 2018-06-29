@@ -7,5 +7,6 @@ namespace Lykke.Service.ClientDialogs.Settings
     public class AppSettings : BaseAppSettings
     {
         public ClientDialogsSettings ClientDialogsService { get; set; }        
+        public AssetServiceClientSettings AssetsServiceClient { get; set; }        
     }
 }

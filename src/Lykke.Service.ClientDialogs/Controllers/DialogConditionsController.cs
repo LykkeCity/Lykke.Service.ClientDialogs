@@ -4,6 +4,7 @@ using AutoMapper;
 using Common;
 using Lykke.Common.Api.Contract.Responses;
 using Lykke.Common.ApiLibrary.Extensions;
+using Lykke.Service.Assets.Client;
 using Lykke.Service.ClientDialogs.Client;
 using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
@@ -20,10 +21,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
     public class DialogConditionsController : Controller, IDialogConditionsApi
     {
         private readonly IDialogConditionsService _dialogConditionsService;
+        private readonly IAssetsServiceWithCache _assetsService;
 
-        public DialogConditionsController(IDialogConditionsService dialogConditionsService)
+        public DialogConditionsController(
+            IDialogConditionsService dialogConditionsService,
+            IAssetsServiceWithCache assetsService)
         {
             _dialogConditionsService = dialogConditionsService;
+            _assetsService = assetsService;
         }
 
         /// <summary>
@@ -45,6 +50,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
             
             if (condition != null && condition.Type != DialogConditionType.Pretrade)
                 throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
+
+            var asset = await _assetsService.TryGetAssetAsync(request.AssetId);
+            
+            if (asset == null)
+                throw new ValidationApiException($"Asset {request.AssetId} not found");
             
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
@@ -76,6 +86,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
             
             if (condition != null && condition.Type != DialogConditionType.Predeposit)
                 throw new ValidationApiException($"Dialog already has a {condition.Type} condition");
+
+            foreach (var assetId in request.AssetIds)
+            {
+                var asset = await _assetsService.TryGetAssetAsync(assetId);
+            
+                if (asset == null)
+                    throw new ValidationApiException($"Asset {assetId} not found");
+            }
             
             await _dialogConditionsService.AddDialogConditionAsync(new DialogCondition
             {
