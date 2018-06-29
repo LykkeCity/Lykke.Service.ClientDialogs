@@ -86,6 +86,11 @@ namespace Lykke.Service.ClientDialogs.Controllers
         {
             if (!ModelState.IsValid)
                 throw new ValidationApiException(ModelState.GetErrorMessage());
+
+            var dialog = await _clientDialogsService.GetDialogAsync(request.DialogId);
+
+            if (dialog == null)
+                throw new ValidationApiException("Dialog not found");
             
             await _clientDialogsService.AssignDialogToClientAsync(request.ClientId, request.DialogId);
         }
