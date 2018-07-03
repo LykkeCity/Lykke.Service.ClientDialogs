@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Common;
 using Lykke.Common.Api.Contract.Responses;
-using Lykke.Common.ApiLibrary.Extensions;
+using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Service.Assets.Client;
 using Lykke.Service.ClientDialogs.Client;
 using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
 using Lykke.Service.ClientDialogs.Core.Domain.ConditionParameters;
 using Lykke.Service.ClientDialogs.Core.Services;
-using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using DialogConditionType = Lykke.Service.ClientDialogs.Core.Domain.DialogConditionType;
@@ -43,9 +42,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task AddPreTradeDialogConditionAsync([FromBody]PreTradeConditionRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
             
             if (condition != null && condition.Type != DialogConditionType.Pretrade)
@@ -79,9 +75,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task AddPreDepositDialogConditionAsync([FromBody]PreDepositConditionRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             var condition = await _dialogConditionsService.GetDialogConditionAsync(request.DialogId);
             
             if (condition != null && condition.Type != DialogConditionType.Predeposit)

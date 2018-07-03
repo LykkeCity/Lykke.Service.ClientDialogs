@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Common;
 using Lykke.Common.Api.Contract.Responses;
-using Lykke.Common.ApiLibrary.Extensions;
+using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Service.ClientDialogs.Client;
 using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
 using Lykke.Service.ClientDialogs.Core.Services;
-using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -84,9 +83,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task AssignDialogToClientAsync([FromBody]AssignDialogRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             var dialog = await _clientDialogsService.GetDialogAsync(request.DialogId);
 
             if (dialog == null)
@@ -108,9 +104,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task DeleteDialogAsync([FromBody]DeleteDialogRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             var dialog = await _clientDialogsService.GetDialogAsync(request.DialogId);
             
             if (dialog == null)

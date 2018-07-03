@@ -6,12 +6,11 @@ using AutoMapper;
 using Common;
 using FluentValidation.AspNetCore;
 using Lykke.Common.Api.Contract.Responses;
-using Lykke.Common.ApiLibrary.Extensions;
+using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Service.ClientDialogs.Client;
 using Lykke.Service.ClientDialogs.Client.Models;
 using Lykke.Service.ClientDialogs.Core.Domain;
 using Lykke.Service.ClientDialogs.Core.Services;
-using Lykke.Service.ClientDialogs.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -40,9 +39,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<DialogModel> AddDialogAsync([FromBody][CustomizeValidator(RuleSet = "new")]DialogModel model)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
             return Mapper.Map<DialogModel>(result);
@@ -61,9 +57,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<DialogModel> UpdateDialogAsync([FromBody][CustomizeValidator(RuleSet = "*")]DialogModel model)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-
             var existingDialog = await _clientDialogsService.GetDialogAsync(model.Id);
             
             if (existingDialog == null)
@@ -142,9 +135,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task SubmitDialogAsync([FromBody]SubmitDialogRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-            
             var dialog = await _clientDialogsService.GetDialogAsync(request.DialogId);
             
             if (dialog == null)
@@ -194,9 +184,6 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<SubmittedDialogResult> IsDialogSubmittedAsyc([FromBody] SubmitDialogRequest request)
         {
-            if (!ModelState.IsValid)
-                throw new ValidationApiException(ModelState.GetErrorMessage());
-            
             return new SubmittedDialogResult
             {
                 Submitted = await _clientDialogsService.IsDialogSubmittedAsync(request.ClientId, request.DialogId, request.ActionId)

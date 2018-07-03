@@ -9,10 +9,34 @@
             Autofac extension to register client dialogs client
             </summary>
         </member>
-        <member name="T:Lykke.Service.ClientDialogs.Client.ClientApiException">
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutofacExtension.RegisterClientDialogsClient(Autofac.ContainerBuilder,System.String)">
             <summary>
-            client api exception
+            Registers client dialogs client
             </summary>
+            <param name="builder"></param>
+            <param name="serviceUrl"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutofacExtension.RegisterClientDialogsClient(Autofac.ContainerBuilder,Lykke.Service.ClientDialogs.Client.ClientDialogsServiceClientSettings)">
+            <summary>
+            Registers client dialogs client
+            </summary>
+            <param name="builder"></param>
+            <param name="settings"></param>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Extensions.StringExtensions">
+            <summary>
+            String extensions
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.Extensions.StringExtensions.GetParameters``1(System.String)">
+            <summary>
+            Returns typed condition parameter object from string
+            </summary>
+            <param name="src"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.GetDialogsAsync(System.String)">
             <summary>
