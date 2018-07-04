@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 using JetBrains.Annotations;
-using Lykke.HttpClientGenerator;
+using Lykke.HttpClientGenerator.Infrastructure;
 
 namespace Lykke.Service.ClientDialogs.Client
 {
@@ -24,7 +24,14 @@ namespace Lykke.Service.ClientDialogs.Client
             if (string.IsNullOrWhiteSpace(serviceUrl))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(serviceUrl));
 
-            builder.RegisterClient<IClientDialogsClient>(serviceUrl);
+            builder.RegisterInstance(
+                    new ClientDialogsClient(HttpClientGenerator.HttpClientGenerator.BuildForUrl(serviceUrl)
+                        .WithAdditionalCallsWrapper(new ExceptionHandlerCallsWrapper())
+                        .WithoutRetries()
+                        .Create())
+                )
+                .As<IClientDialogsClient>()
+                .SingleInstance();
         }
 
         /// <summary>
