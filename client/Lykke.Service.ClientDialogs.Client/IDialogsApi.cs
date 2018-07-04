@@ -71,6 +71,6 @@ namespace Lykke.Service.ClientDialogs.Client
         /// <param name="request"></param>
         /// <returns></returns>
         [Post("/api/dialogs/isSubmitted")]
-        Task<SubmittedDialogResult> IsDialogSubmittedAsyc([Body] SubmitDialogRequest request);
+        Task<SubmittedDialogResult> IsDialogSubmittedAsync([Body] SubmitDialogRequest request);
     }
 }

@@ -67,7 +67,7 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
             
             tasks.Add(UnAssignGlobalDialogAsync(dialogId));
 
-            await Task.WhenAny(tasks);
+            await Task.WhenAll(tasks);
         }
 
         public Task SetDialogConditionTypeAsync(string dialogId, DialogConditionType? type)
@@ -83,10 +83,15 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
 
         public async Task<IEnumerable<IClientDialog>> GetClientDialogsAsync(string clientId)
         {
-            var indexes = (await _clientDialogIndex.GetDataAsync(clientId)).ToList();
-            var clientDialogs = (await _tableStorage.GetDataAsync(indexes)).ToList();
+            var indexesTask = _clientDialogIndex.GetDataAsync(clientId);
+            var globalIndexesTask = _globalDialogIndex.GetDataAsync(ClientDialogEntity.GenerateGlobalDialogPartitionKey());
+
+            await Task.WhenAll(indexesTask, globalIndexesTask);
+
+            var indexes = indexesTask.Result;
+            var globalIndexes = globalIndexesTask.Result;
             
-            var globalIndexes = (await _globalDialogIndex.GetDataAsync(ClientDialogEntity.GenerateGlobalDialogPartitionKey())).ToList();
+            var clientDialogs = (await _tableStorage.GetDataAsync(indexes)).ToList();
             var globalDialogs = (await _tableStorage.GetDataAsync(globalIndexes)).ToList();
 
             clientDialogs.AddRange(globalDialogs.Where(item=> clientDialogs.All(x => x.Id != item.Id)));

@@ -182,7 +182,7 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [SwaggerOperation("IsDialogSubmitted")]
         [ProducesResponseType(typeof(SubmittedDialogResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
-        public async Task<SubmittedDialogResult> IsDialogSubmittedAsyc([FromBody] SubmitDialogRequest request)
+        public async Task<SubmittedDialogResult> IsDialogSubmittedAsync([FromBody] SubmitDialogRequest request)
         {
             return new SubmittedDialogResult
             {
