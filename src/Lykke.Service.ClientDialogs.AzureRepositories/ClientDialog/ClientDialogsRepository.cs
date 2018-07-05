@@ -88,8 +88,8 @@ namespace Lykke.Service.ClientDialogs.AzureRepositories.ClientDialog
 
             await Task.WhenAll(indexesTask, globalIndexesTask);
 
-            var indexes = indexesTask.Result;
-            var globalIndexes = globalIndexesTask.Result;
+            var indexes = await indexesTask;
+            var globalIndexes = await globalIndexesTask;
             
             var clientDialogs = (await _tableStorage.GetDataAsync(indexes)).ToList();
             var globalDialogs = (await _tableStorage.GetDataAsync(globalIndexes)).ToList();
