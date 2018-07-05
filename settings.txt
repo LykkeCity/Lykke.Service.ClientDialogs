@@ -8,6 +8,10 @@
   "MonitoringServiceClient": {
     "MonitoringServiceUrl": "${MonitoringServiceUrl}"
   },
+  "AssetsServiceClient": {
+    "ServiceUrl": "${AssetsServiceUrl}",
+    "ExpirationPeriod": "${AssetsServiceExpirationPeriod}"
+  },
   "SlackNotifications": {
     "AzureQueue": {
       "ConnectionString": "${SlackNotificationsConnString}:[AzureTableStorage]",
