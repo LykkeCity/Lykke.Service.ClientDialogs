@@ -1,0 +1,457 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Lykke.Service.ClientDialogs.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Lykke.Service.ClientDialogs.Client.AutofacExtension">
+            <summary>
+            Autofac extension to register client dialogs client
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutofacExtension.RegisterClientDialogsClient(Autofac.ContainerBuilder,System.String)">
+            <summary>
+            Registers client dialogs client
+            </summary>
+            <param name="builder"></param>
+            <param name="serviceUrl"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutofacExtension.RegisterClientDialogsClient(Autofac.ContainerBuilder,Lykke.Service.ClientDialogs.Client.ClientDialogsServiceClientSettings)">
+            <summary>
+            Registers client dialogs client
+            </summary>
+            <param name="builder"></param>
+            <param name="settings"></param>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Extensions.StringExtensions">
+            <summary>
+            String extensions
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.Extensions.StringExtensions.GetParameters``1(System.String)">
+            <summary>
+            Returns typed condition parameter object from string
+            </summary>
+            <param name="src"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.GetDialogsAsync(System.String)">
+            <summary>
+            Gets client dialogs including global dialogs
+            </summary>
+            <param name="clientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.GetDialogAsync(System.String,System.String)">
+            <summary>
+            Gets client dialog
+            </summary>
+            <param name="dialogId"></param>
+            <param name="clientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.AssignDialogToClientAsync(Lykke.Service.ClientDialogs.Client.Models.AssignDialogRequest)">
+            <summary>
+            Assigns dialog to the client
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.DeleteDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DeleteDialogRequest)">
+            <summary>
+            Deletes client dialog
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.GetPreTradeDialogsAsync(System.String,System.String)">
+            <summary>
+            Gets pretrade client dialogs for asset
+            </summary>
+            <param name="clientId"></param>
+            <param name="assetId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IClientDialogsApi.GetPreDepositDialogsAsync(System.String,System.String)">
+            <summary>
+            Gets predeposit client dialogs for asset
+            </summary>
+            <param name="clientId"></param>
+            <param name="assetId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.Dialogs">
+            <summary>
+            Api for dialogs management
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.ClientDialogs">
+            <summary>
+            Api for client dialogs management
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.IClientDialogsClient.DialogConditions">
+            <summary>
+            Api for dialog conditions management
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogConditionsApi.AddPreTradeDialogConditionAsync(Lykke.Service.ClientDialogs.Client.Models.PreTradeConditionRequest)">
+            <summary>
+            Adds a pretrade dialog condition
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogConditionsApi.AddPreDepositDialogConditionAsync(Lykke.Service.ClientDialogs.Client.Models.PreDepositConditionRequest)">
+            <summary>
+            Adds a pretrade dialog condition
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogConditionsApi.DeleteDialogConditionAsync(System.String)">
+            <summary>
+            Deletes dialog condition
+            </summary>
+            <param name="dialogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogConditionsApi.GetDialogConditionAsync(System.String)">
+            <summary>
+            Gets dialog condition
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.IDialogsApi">
+            <summary>
+            Dialogs service
+            </summary>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.AddDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DialogModel)">
+            <summary>
+            Adds new dialog
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.UpdateDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DialogModel)">
+            <summary>
+            Updates new dialog
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.GetDialogsAsync">
+            <summary>
+            Gets all dialogs
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.GetDialogAsync(System.String)">
+            <summary>
+            Gets dialog by id
+            </summary>
+            <param name="dialogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.DeleteDialogAsync(System.String)">
+            <summary>
+            Deletes dialog and assignments (client and global)
+            </summary>
+            <param name="dialogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.SubmitDialogAsync(Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest)">
+            <summary>
+            Sumbits client dialog
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.GetSubmittedDialogsAsync(System.String)">
+            <summary>
+            Gets dialogs submitted by client
+            </summary>
+            <param name="clientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.IDialogsApi.IsDialogSubmittedAsync(Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest)">
+            <summary>
+            Checks if the dialog is already submitted by the client
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.ActionType">
+            <summary>
+            Type of the action element
+            </summary>
+        </member>
+        <member name="F:Lykke.Service.ClientDialogs.Client.Models.ActionType.Submit">
+            <summary>
+            Button
+            </summary>
+        </member>
+        <member name="F:Lykke.Service.ClientDialogs.Client.Models.ActionType.Checkbox">
+            <summary>
+            Checkbox
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.AssignDialogRequest">
+            <summary>
+            Assign dialog to the client request
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel">
+            <summary>
+            Client dialog
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.Id">
+            <summary>
+            Dialog id
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.Type">
+            <summary>
+            Dialog type
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.ConditionType">
+            <summary>
+            Dialog type
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.Header">
+            <summary>
+            Dialog title
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.Text">
+            <summary>
+            Dialog text
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.ClientDialogModel.Actions">
+            <summary>
+            List of dialog actions (buttons or checkbox) for submit
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.DeleteDialogRequest">
+            <summary>
+            Delete dialog request
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DeleteDialogRequest.ClientId">
+            <summary>
+            Client Id
+            <remarks>null for global dialog</remarks>
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DeleteDialogRequest.DialogId">
+            <summary>
+            Dialog id
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.DialogActionModel">
+            <summary>
+            Dialog action (button or checkbox)
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogActionModel.Id">
+            <summary>
+            Action id
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogActionModel.Type">
+            <summary>
+            Action type (button, checkbox)
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogActionModel.Text">
+            <summary>
+            Action text
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.DialogModel">
+            <summary>
+            Client dialog
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.Id">
+            <summary>
+            Dialog id
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.Type">
+            <summary>
+            Dialog type
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.ConditionType">
+            <summary>
+            Dialog type
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.IsGlobal">
+            <summary>
+            Is the dialog assigned as a global dialog for all clients
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.Header">
+            <summary>
+            Dialog title
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.Text">
+            <summary>
+            Dialog text
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.DialogModel.Actions">
+            <summary>
+            List of dialog actions (buttons or checkbox) for submit
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.DialogType">
+            <summary>
+            Type of the dialog
+            </summary>
+        </member>
+        <member name="F:Lykke.Service.ClientDialogs.Client.Models.DialogType.Info">
+            <summary>
+            Information
+            </summary>
+        </member>
+        <member name="F:Lykke.Service.ClientDialogs.Client.Models.DialogType.Warning">
+            <summary>
+            Warning
+            </summary>
+        </member>
+        <member name="F:Lykke.Service.ClientDialogs.Client.Models.DialogType.Question">
+            <summary>
+            Question
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest">
+            <summary>
+            Request to submit dialog
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest.ClientId">
+            <summary>
+            ClientId who submits the dialog
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest.DialogId">
+            <summary>
+            Action id
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest.ActionId">
+            <summary>
+            Action id
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.SubmittedDialogModel">
+            <summary>
+            Submitted dialog info
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmittedDialogModel.DialogId">
+            <summary>
+            Dialog id
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmittedDialogModel.ActionId">
+            <summary>
+            Action id
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.Models.SubmittedDialogResult">
+            <summary>
+            Submitted dialog result
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.Models.SubmittedDialogResult.Submitted">
+            <summary>
+            Returns true if the dialog is submitted
+            </summary>
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.GetDialogsAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.GetDialogAsync(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.AssignDialogToClientAsync(Lykke.Service.ClientDialogs.Client.Models.AssignDialogRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.DeleteDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DeleteDialogRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.GetPreTradeDialogsAsync(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIClientDialogsApi.GetPreDepositDialogsAsync(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi.AddPreTradeDialogConditionAsync(Lykke.Service.ClientDialogs.Client.Models.PreTradeConditionRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi.AddPreDepositDialogConditionAsync(Lykke.Service.ClientDialogs.Client.Models.PreDepositConditionRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi.DeleteDialogConditionAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogConditionsApi.GetDialogConditionAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.AddDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DialogModel)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.UpdateDialogAsync(Lykke.Service.ClientDialogs.Client.Models.DialogModel)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.GetDialogsAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.GetDialogAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.DeleteDialogAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.SubmitDialogAsync(Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.GetSubmittedDialogsAsync(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ClientDialogs.Client.AutoGeneratedIDialogsApi.IsDialogSubmittedAsync(Lykke.Service.ClientDialogs.Client.Models.SubmitDialogRequest)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
