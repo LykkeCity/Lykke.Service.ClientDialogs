@@ -23,7 +23,9 @@ namespace Lykke.Service.ClientDialogs.Models.ValidationModels
                     .NotEmpty()
                     .WithMessage("Specify at least one action")
                     .Must(actions => actions.All(item => item.Id.IsValidPartitionOrRowKey()))
-                    .WithMessage("Actions has a record with invalid Id");
+                    .WithMessage("Actions has a record with invalid Id")
+                    .Must(actions => actions.Length == actions.Select(x => x.Id).Distinct().ToArray().Length)
+                    .WithMessage("Actions must have unique ids");
             });
             
             RuleFor(x => x.Id)
