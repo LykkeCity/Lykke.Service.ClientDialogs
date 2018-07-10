@@ -39,6 +39,14 @@ namespace Lykke.Service.ClientDialogs.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int) HttpStatusCode.BadRequest)]
         public async Task<DialogModel> AddDialogAsync([FromBody][CustomizeValidator(RuleSet = "new")]DialogModel model)
         {
+            if (!string.IsNullOrEmpty(model.Id))
+            {
+                var existingDialog = await _clientDialogsService.GetDialogAsync(model.Id);
+            
+                if (existingDialog != null)
+                    throw new ValidationApiException("Dialog is already exists, use update method to change this dialog");
+            }
+            
             IClientDialog dialog = Mapper.Map<ClientDialog>(model);
             var result = await _clientDialogsService.AddDialogAsync(dialog);
             return Mapper.Map<DialogModel>(result);
