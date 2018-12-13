@@ -12,6 +12,13 @@ namespace Lykke.Service.ClientDialogs
     [UsedImplicitly]
     public class Startup
     {
+        private readonly LykkeSwaggerOptions _swaggerOptions = new LykkeSwaggerOptions
+        {
+            ApiTitle = "ClientDialogs API",
+            ApiVersion = "v1"
+        };
+
+        [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             Mapper.Initialize(cfg =>
@@ -20,22 +27,26 @@ namespace Lykke.Service.ClientDialogs
             });
 
             Mapper.AssertConfigurationIsValid();
-
+            
             return services.BuildServiceProvider<AppSettings>(options =>
             {
-                options.ApiTitle = "ClientDialogs API";
-                options.Logs = loggingOptions =>
+                options.SwaggerOptions = _swaggerOptions;
+
+                options.Logs = logs =>
                 {
-                    loggingOptions.AzureTableName = "ClientDialogsLog";
-                    loggingOptions.AzureTableConnectionStringResolver =
-                        settings => settings.ClientDialogsService.Db.LogsConnString;
+                    logs.AzureTableName = "ClientDialogsLog";
+                    logs.AzureTableConnectionStringResolver = settings => settings.ClientDialogsService.Db.LogsConnString;
                 };
             });
         }
 
+        [UsedImplicitly]
         public void Configure(IApplicationBuilder app)
         {
-            app.UseLykkeConfiguration();
+            app.UseLykkeConfiguration(options =>
+            {
+                options.SwaggerOptions = _swaggerOptions;
+            });
         }
     }
 }
