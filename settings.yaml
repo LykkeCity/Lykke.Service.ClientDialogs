@@ -1,0 +1,23 @@
+ClientDialogsService:
+  Db:
+    LogsConnString:
+      settings-key: ClientDialogsService-LogsConnString
+      types: [ AzureTableStorage, Tag ]
+    DataConnString:
+      settings-key: ClientDialogsService-DataConnString
+      types: [ AzureTableStorage, Tag ]
+SlackNotifications:
+  AzureQueue:
+    ConnectionString:
+      settings-key: SlackNotificationsConnString
+      types: [ AzureTableStorage ]
+    QueueName:
+      settings-key: SlackQueueName
+MonitoringServiceClient:
+  MonitoringServiceUrl:
+    settings-key: MonitoringServiceUrl
+AssetsServiceClient:
+  ServiceUrl:
+    settings-key: AssetsServiceUrl
+  ExpirationPeriod:
+    settings-key: AssetsServiceExpirationPeriod
